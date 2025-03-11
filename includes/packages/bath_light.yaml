@@ -1,0 +1,64 @@
+bath_light:
+  switch:
+    - platform: template
+      switches:
+        my_test_switch:
+          value_template: "{{ states('light.test_light') }}"
+          turn_on:
+            action: light.turn_on
+            target:
+              entity_id: light.test_light
+          turn_off:
+            action: light.turn_off
+            target:
+              entity_id: light.test_light
+
+  automation:
+    - id: bath_light_on
+      alias: Свет в ванной включить
+      trigger:
+        - platform: state
+          entity_id: binary_sensor.motion_bath_occupancy
+          to: "on"
+      condition:
+        - condition: state
+          entity_id: switch.my_test_switch
+          state: "off"
+      action:
+        - action: switch.turn_on
+          target:
+            entity_id: switch.my_test_switch
+        # - action: notify.mobile_app_iphone_aleksandr
+        #   metadata: {}
+        #   data:
+        #     message: Свет в ванной включить
+    #===================================================
+    - id: bath_light_off
+      alias: Свет в ванной выключить
+      trigger:
+        - platform: state
+          entity_id: binary_sensor.motion_bath_occupancy
+          to: "off"
+          for: "00:01:00"
+      condition:
+        - condition: state
+          entity_id: switch.my_test_switch
+          state: "on"
+      action:
+        - action: switch.turn_off
+          target:
+            entity_id: switch.my_test_switch
+        # - action: notify.mobile_app_iphone_aleksandr
+        #   metadata: {}
+        #   data:
+        #     message: Свет в ванной выключить
+    #========================================
+    - id: bath_light_notify
+      alias: Уведомление о свете в ванной
+      trigger:
+        - platform: state
+          entity_id: switch.my_test_switch
+      action:
+        - action: notify.mobile_app_iphone_aleksandr
+          data:
+            message: "Свет в ванной {{ trigger.to_state.state }}"

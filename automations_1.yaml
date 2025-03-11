@@ -1,0 +1,173 @@
+- id: '1740494025827'
+  alias: Левый верхний выключатель кухня зал
+  description: ''
+  triggers:
+  - trigger: mqtt
+    topic: zigbee2mqtt_1/switch_kitchen_hall/action
+    payload: single_left
+  conditions: []
+  actions:
+  - action: switch.toggle
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.line_relay_kitchen
+  mode: single
+- id: '1740500687848'
+  alias: Левый нижний выключатель кухня зал
+  description: ''
+  triggers:
+  - trigger: mqtt
+    topic: zigbee2mqtt_1/switch_kitchen_hall/action
+    payload: single_left_down
+  conditions: []
+  actions:
+  - action: switch.toggle
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.lamp_kitchen
+  mode: single
+- id: '1740502482454'
+  alias: Правый верхний выключатель кухня зал
+  description: ''
+  triggers:
+  - trigger: mqtt
+    topic: zigbee2mqtt_1/switch_kitchen_hall/action
+    payload: single_right
+  conditions: []
+  actions:
+  - action: switch.toggle
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.switch_kitchen_hall_right
+  mode: single
+- id: '1740502633327'
+  alias: Правый нижний выключатель кухня зал
+  description: ''
+  triggers:
+  - trigger: mqtt
+    topic: zigbee2mqtt_1/switch_kitchen_hall/action
+    payload: single_right_down
+  conditions: []
+  actions:
+  - action: switch.toggle
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.switch_kitchen_hall_left
+  mode: single
+- id: '1740563516926'
+  alias: Я дома
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - input_boolean.alex
+    from: 'off'
+    to: 'on'
+  conditions: []
+  actions:
+  - action: notify.mobile_app_iphone_aleksandr
+    metadata: {}
+    data:
+      message: Я дома
+  mode: single
+- id: '1740563587967'
+  alias: Я не дома
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - input_boolean.alex
+    from: 'on'
+    to: 'off'
+  conditions: []
+  actions:
+  - action: notify.mobile_app_iphone_aleksandr
+    metadata: {}
+    data:
+      message: Я не дома
+  mode: single
+- id: '1740569109550'
+  alias: Door
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.binary_sensor_door_toilet_contact
+    from: 'on'
+    to: 'off'
+  conditions: []
+  actions:
+  - action: notify.mobile_app_iphone_aleksandr
+    metadata: {}
+    data:
+      message: Дверь закрыта
+  mode: single
+- id: '1740591093040'
+  alias: At www5
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - sensor.iphone_aleksandr_ssid
+    from:
+    to: WWW5
+  conditions: []
+  actions:
+  - action: notify.mobile_app_iphone_aleksandr
+    metadata: {}
+    data:
+      message: At www_5
+  mode: single
+- id: '1740591197979'
+  alias: At lte
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - sensor.iphone_aleksandr_connection_type
+    from:
+    to: Cellular
+  conditions: []
+  actions:
+  - action: notify.mobile_app_iphone_aleksandr
+    metadata: {}
+    data:
+      message: At LTE
+  mode: single
+- id: '1740677018186'
+  alias: Свет в ванной
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.motion_bath_occupancy
+    from:
+    to: 'on'
+  conditions:
+  - condition: state
+    entity_id: binary_sensor.door_bath_contact
+    state: 'off'
+  actions:
+  - action: notify.mobile_app_iphone_aleksandr
+    metadata: {}
+    data:
+      message: В ванной включить свет
+  mode: single
+- id: '1740919441609'
+  alias: Test template
+  description: ''
+  triggers:
+  - trigger: template
+    value_template: "{{ is_state('binary_sensor.0x54ef441000118375_occupancy', 'off')
+      \ \n   and is_state('light.0x54ef44100035a3eb', 'on')\n}}"
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 5
+  conditions: []
+  actions: []
+  mode: single

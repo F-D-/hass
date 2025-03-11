@@ -1,0 +1,95 @@
+bedroom_marina:
+
+  mqtt:
+    sensor:
+      - name: lamp_big_bedroom_marina_attr
+        unique_id: lamp_big_bedroom_marina_attr
+        state_topic: "zigbee2mqtt_1/lamp_big_bedroom_marina"
+        json_attributes_topic: "zigbee2mqtt_1/lamp_big_bedroom_marina"
+        json_attributes_template: "{{ value_json | tojson }}"
+
+  automation:
+    - id: dimmer_v_spalne_mariny_perekliuchenie_sveta
+      alias: Диммер в спальне Марины переключение света
+      triggers:
+        - trigger: state
+          entity_id: sensor.dimmer_bedroom_marina_action
+          to: single
+      # triggers:
+      #   - trigger: mqtt
+      #     topic: zigbee2mqtt_1/switch_kitchen_hall/action
+      #     payload: single_left
+      conditions: []
+      actions:
+        - action: light.toggle
+          entity_id:  
+              - light.lamp_big_bedroom_marina_white
+              - light.lamp_small_bedroom_marina
+        # - choose:
+        #   - conditions:
+        #     - condition: state
+        #       entity_id: light.lamp_big_bedroom_marina_white
+        #       state: "on"
+        #     sequence:
+        #       - action: light.turn_off
+        #         target:
+        #           entity_id: 
+        #             - light.lamp_big_bedroom_marina_white
+        #             - light.lamp_small_bedroom_marina
+        #   - conditions:
+        #     - condition: state
+        #       entity_id: light.lamp_big_bedroom_marina_white
+        #       state: "off"
+        #     sequence:
+        #       - action: light.turn_on
+        #         target:
+        #           entity_id: 
+        #             - light.lamp_big_bedroom_marina_white
+        #             - light.lamp_small_bedroom_marina 
+      mode: single
+    #===================================================
+    - id: dimmer_v_spalne_mariny_izmenit_iarkost
+      alias: Диммер в спальне Марины изменить яркость
+      triggers:
+        - trigger: state
+          entity_id: sensor.dimmer_bedroom_marina_action_rotation_percent
+          from: unknown
+      conditions:
+        - condition: state
+          entity_id: sensor.dimmer_bedroom_marina_action
+          state: 
+            - "rotation"
+            - "start_rotating"
+      actions:
+        - choose:
+          - conditions:
+            - condition: state
+              entity_id: sensor.dimmer_bedroom_marina_action_rotation_button_state
+              state: "released"
+            sequence:
+              - action: light.turn_on
+                target:
+                  entity_id: 
+                    - light.lamp_big_bedroom_marina_white
+                    - light.lamp_small_bedroom_marina
+                data_template:
+                  brightness: >-
+                    {{ ((state_attr('sensor.lamp_big_bedroom_marina_attr', 'brightness_white') | int(1)) + (trigger.to_state.state | float) * 2.55) | int(1) }}
+                  transition: 1
+
+          - conditions:
+            - condition: state
+              entity_id: sensor.dimmer_bedroom_marina_action_rotation_button_state
+              state: "pressed"
+            sequence:
+              - action: light.turn_on
+                target:
+                  entity_id: 
+                    - light.lamp_big_bedroom_marina_white
+                    - light.lamp_small_bedroom_marina
+                data_template:
+                  #2.17, потому что температура цвета от 153 до 370, а значит от 0 до 217
+                  color_temp: >-
+                    {{ ((state_attr('sensor.lamp_big_bedroom_marina_attr', 'color_temp_white') | int(1)) + (trigger.to_state.state | float) * 2.17) | int(1) }}
+                  transition: 1
+

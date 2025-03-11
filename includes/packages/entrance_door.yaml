@@ -1,0 +1,54 @@
+entrance_door:
+  #
+  input_boolean:
+    lock_trigger_in_hass:
+      name: Замок триггер в HASS
+      initial: false
+      icon: mdi:upload-lock
+#=
+    lock_trigger_from_hass:
+      name: Замок триггер из HASS
+      initial: false
+      icon: mdi:download-lock
+#
+  timer:
+    lock_entrance_door_timer:
+      name: Таймер входной двери
+      duration: "00:02:00"
+      restore: true
+
+  automation:
+    - id: zapusk_taimara_zamka_vkhodnoi_dveri
+      alias: Запуск таймара замка входной двери
+      triggers:
+        - trigger: state
+          entity_id: input_boolean.lock_trigger_in_hass
+          to: "off"
+      action:
+        - action: timer.start
+          entity_id: timer.lock_entrance_door_timer
+        #      data:
+        #        duration: 00:00:10
+        - action: input_boolean.turn_off
+          entity_id: input_boolean.lock_trigger_from_hass
+    #==========================================================
+    - id: avtozakrytie_zamka_vkhodnoi_dveri_po_istchenii_taimera
+      alias: Автозакрытие замка входной двери по истечении таймера
+      triggers:
+        - trigger: event
+          event_type: timer.finished
+          event_data:
+            entity_id: timer.lock_entrance_door_timer
+      actions:
+        - action: input_boolean.turn_on
+          entity_id: input_boolean.lock_trigger_from_hass
+    #==========================================================
+    - id: reset_timer_if_door_already_closed
+      alias: Сброс таймера если дверь уже закрыта
+      triggers:
+        - trigger: state
+          entity_id: input_boolean.lock_trigger_in_hass
+          to: "on"
+      actions:
+        - action: timer.cancel
+          entity_id: timer.lock_entrance_door_timer

@@ -1,0 +1,84 @@
+bedroom_andrey:
+
+  mqtt:
+    sensor:
+      - name: lamp_bedroom_andrey_attr
+        unique_id: lamp_bedroom_andrey_attr
+        state_topic: "zigbee2mqtt_1/lamp_bedroom_andrey"
+        json_attributes_topic: "zigbee2mqtt_1/lamp_bedroom_andrey"
+        json_attributes_template: "{{ value_json | tojson }}"
+
+  automation:
+    - id: dimmer_v_spalne_andreia_perekliuchenie_sveta
+      alias: Диммер в спальне Андрея переключение света
+      triggers:
+        - trigger: state
+          entity_id: sensor.dimmer_bedroom_andrey_action
+          to: single
+      # triggers:
+      #   - trigger: mqtt
+      #     topic: zigbee2mqtt_1/switch_kitchen_hall/action
+      #     payload: single_left
+      conditions: []
+      actions:
+        - action: light.toggle
+          entity_id: light.lamp_bedroom_andrey_white
+      mode: single
+    #===================================================
+
+    - id: dimmer_v_spalne_andreia_vkluchenie_maximalnoy_yarkosti
+      alias: Диммер в спальне Андрея включение максимальной яркости
+      triggers:
+        - trigger: state
+          entity_id: sensor.dimmer_bedroom_andrey_action
+          to: holf
+      # triggers:
+      #   - trigger: mqtt
+      #     topic: zigbee2mqtt_1/switch_kitchen_hall/action
+      #     payload: single_left
+      conditions: []
+      actions:
+        - action: light.toggle
+          entity_id: light.lamp_bedroom_andrey_white
+      
+    - id: dimmer_v_spalne_andreia_izmenit_iarkost
+      alias: Диммер в спальне Андрея изменить яркость
+      triggers:
+        - trigger: state
+          entity_id: sensor.dimmer_bedroom_andrey_action_rotation_percent
+          from: unknown
+      conditions:
+        - condition: state
+          entity_id: sensor.dimmer_bedroom_andrey_action
+          state: 
+            - "rotation"
+            - "start_rotating"
+      actions:
+        - choose:
+          - conditions:
+            - condition: state
+              entity_id: sensor.dimmer_bedroom_andrey_action_rotation_button_state
+              state: "released"
+            sequence:
+              - action: light.turn_on
+                target:
+                  entity_id: light.lamp_bedroom_andrey_white
+                data_template:
+                  brightness: >-
+                    {# ((state_attr('sensor.lamp_bedroom_andrey_attr', 'brightness_white') | int(1)) + (trigger.to_state.state | float) * 2) | int(1) #}
+                    {{ ((state_attr('sensor.lamp_bedroom_andrey_attr', 'brightness_white') | int(1)) + (trigger.to_state.state | float) * 2.55) | int(1) }}
+                  transition: 1
+
+          - conditions:
+            - condition: state
+              entity_id: sensor.dimmer_bedroom_andrey_action_rotation_button_state
+              state: "pressed"
+            sequence:
+              - action: light.turn_on
+                target:
+                  entity_id: light.lamp_bedroom_andrey_white
+                data_template:
+                  #2.17, потому что температура цвета от 153 до 370, а значит от 0 до 217
+                  color_temp: >-
+                    {{ ((state_attr('sensor.lamp_bedroom_andrey_attr', 'color_temp_white') | int(1)) + (trigger.to_state.state | float) * 2.17) | int(1) }}
+                  transition: 1

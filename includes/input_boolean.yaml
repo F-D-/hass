@@ -1,0 +1,4 @@
+
+test_light:
+  name: Выключатель виртуальной люстры
+  icon: mdi:light-switch

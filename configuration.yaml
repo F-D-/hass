@@ -1,0 +1,34 @@
+homeassistant:
+  packages: !include_dir_merge_named includes/packages
+  customize:
+    light.lamp_big_bedroom_marina_white:
+      entity_picture: /local/entity_image/aqara_t1m.png
+      
+
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+input_boolean: !include includes/input_boolean.yaml
+# automation: !include automations.yaml
+automation: !include_dir_merge_list includes/automation
+script: !include scripts.yaml
+scene: !include scenes.yaml
+template: !include includes/templates.yaml
+light: !include includes/light.yaml
+timer: !include includes/timer.yaml
+input_number: !include includes/input_number.yaml
+
+panel_custom:
+  - name: server_state
+    sidebar_title: "System"
+    sidebar_icon: mdi:server
+    js_url: /api/hassio/app/entrypoint.js
+    url_path: "hassio/system"
+    embed_iframe: true
+    require_admin: true
+    config:
+      ingress: core_configurator

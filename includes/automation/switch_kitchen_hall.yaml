@@ -1,0 +1,76 @@
+- id: "1740494025827"
+  alias: Левый верхний выключатель кухня зал
+  description: ""
+  triggers:
+    # - trigger: state
+    #   entity_id: sensor.switch_kitchen_hall_action
+    #   to: single_left
+    - trigger: mqtt
+      topic: zigbee2mqtt_1/switch_kitchen_hall/action
+      payload: single_left
+  conditions: []
+  actions:
+    - action: switch.toggle
+      metadata: {}
+      data: {}
+      target:
+        entity_id: switch.line_relay_kitchen
+  mode: single
+  #====================================================
+- id: "1740500687848"
+  alias: Левый нижний выключатель кухня зал
+  description: ""
+  triggers:
+    # - trigger: state
+    #   entity_id: sensor.switch_kitchen_hall_action
+    #   to: single_left_down
+    - trigger: mqtt
+      topic: zigbee2mqtt_1/switch_kitchen_hall/action
+      payload: single_left_down
+  conditions: []
+  actions:
+    - action: switch.toggle
+      metadata: {}
+      data: {}
+      target:
+        entity_id: switch.lamp_kitchen
+  mode: single
+  #====================================================
+- id: "1740502482454"
+  alias: Правый верхний выключатель кухня зал
+  description: ""
+  triggers:
+    # - trigger: state
+    #   entity_id: sensor.switch_kitchen_hall_action
+    #   to: single_right
+    - trigger: mqtt
+      topic: zigbee2mqtt_1/switch_kitchen_hall/action
+      payload: single_right
+  conditions: []
+  actions:
+    - action: switch.toggle
+      metadata: {}
+      data: {}
+      target:
+        entity_id: switch.switch_kitchen_hall_right
+  mode: single
+  #====================================================
+- id: "1740502633327"
+  alias: Правый нижний выключатель кухня зал
+  description: ""
+  triggers:
+    # - trigger: state
+    #   entity_id: sensor.switch_kitchen_hall_action
+    #   to: single_right_down
+    - trigger: mqtt
+      topic: zigbee2mqtt_1/switch_kitchen_hall/action
+      payload: single_right_down
+  conditions: []
+  actions:
+    - action: switch.toggle
+      metadata: {}
+      data: {}
+      target:
+        entity_id: switch.switch_kitchen_hall_left
+  mode: single
+#====================================================

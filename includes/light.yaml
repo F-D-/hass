@@ -1,0 +1,18 @@
+- platform: template
+  lights:
+    test_light:
+      unique_id: testoviy_svetilnik
+      friendly_name: "Тестовый светильник"
+      value_template: "{{ states('input_boolean.test_light') }}"
+      level_template: "{{ states('input_number.test_light_brightness') | int }}"
+      turn_on:
+        action: input_boolean.turn_on
+        entity_id: input_boolean.test_light
+      turn_off:
+        action: input_boolean.turn_off
+        entity_id: input_boolean.test_light
+      set_level:
+        action: input_number.set_value
+        entity_id: input_number.test_light_brightness
+        data:
+          value: "{{ brightness }}"

@@ -1,0 +1,128 @@
+toilet_light:
+ 
+  timer:
+    toilet_light_off_timer:
+      name: Таймер на выключени света в туалете
+      duration: "00:00:10"
+      restore: true
+    toilet_long_time_light_timer:
+      name: Таймер на случай долгого включенного света в туалете
+      duration: "00:00:30"
+      restore: true
+        
+
+  automation:
+    - id: toilet_light_on_by_open_door
+      alias: По открытию двери запустить таймер или включить свет
+      
+      triggers:
+        - trigger: state
+          entity_id: binary_sensor.door_toilet_contact
+          to: "on"
+
+      # condition:
+      #   - condition: state
+      #     entity_id: switch.switch_toilet_up
+      #     state: "off"
+        # - condition: state
+        #   entity_id: binary_sensor.motion_toilet_occupancy
+        #   state: "off"
+
+      actions:
+        - choose:
+            - conditions:
+                - condition: state
+                  entity_id: switch.switch_toilet_up
+                  state: "off"
+              sequence:
+                - action: switch.turn_on
+                  entity_id: switch.switch_toilet_up
+                - action: timer.cancel
+                  entity_id: timer.toilet_light_off_timer  
+                - action: timer.start
+                  entity_id: timer.toilet_long_time_light_timer
+            - conditions:
+                - condition: state
+                  entity_id: switch.switch_toilet_up
+                  state: "on"
+                - condition: state
+                  entity_id: binary_sensor.motion_toilet_occupancy
+                  state: "on"
+              sequence:
+                - action: timer.start
+                  entity_id: timer.toilet_light_off_timer
+#===================================================
+    # - id: toilet_start_timer_by_open_door
+    #   alias: В туалете запустить таймер по открытии двери
+
+    #   trigger:
+    #     - trigger: state
+    #       entity_id: binary_sensor.door_toilet_contact
+    #       to: "on"
+
+    #   condition:
+    #     - condition: state
+    #       entity_id: switch.switch_toilet_up
+    #       state: "on"
+    #     - condition: state
+    #       entity_id: binary_sensor.motion_toilet_occupancy
+    #       state: "on"
+
+    #   action:
+    #     - action: timer.start
+    #       target:
+    #         entity_id: timer.toilet_light_off_timer
+#===================================================
+    - id: toilet_start_timer_by_close_door
+      alias: В туалете запустить таймер по зактрытию двери
+
+      trigger:
+        - trigger: state
+          entity_id: binary_sensor.door_toilet_contact
+          to: "off"
+
+      condition:
+        - condition: state
+          entity_id: switch.switch_toilet_up
+          state: "on"
+        - condition: state
+          entity_id: binary_sensor.motion_toilet_occupancy
+          state: "off"
+
+      action:
+        - action: timer.start
+          target:
+            entity_id: timer.toilet_light_off_timer
+
+    #========================================
+    - id: toilet_light_off_when_timers_finish
+      alias: Выключение света в туалете по завершении таймеров
+      triggers:
+        - trigger: event
+          event_type: timer.finished
+          event_data:
+            entity_id: timer.toilet_light_off_timer
+        - trigger: event
+          event_type: timer.finished
+          event_data:
+            entity_id: timer.toilet_long_time_light_timer
+      action:
+        - action: switch.turn_off
+          entity_id: switch.switch_toilet_up
+        - action: timer.cancel
+          entity_id: 
+            - timer.toilet_long_time_light_timer
+            - timer.toilet_light_off_timer
+
+    # - id: toilet_light_off_long_timer_finish
+    #   alias: Выключение света в туалете по завершении длинного таймера
+    #   trigger:
+    #     - platform: event
+    #       event_type: timer.finished
+    #       event_data:
+    #         entity_id: timer.toilet_long_time_light_timer
+    #   action:
+    #     - action: switch.turn_off
+    #       entity_id: switch.switch_toilet_up
+    #     - action: timer.cancel
+    #       entity_id: timer.toilet_long_time_light_timer

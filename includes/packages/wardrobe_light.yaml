@@ -1,0 +1,72 @@
+wardrobe_light:
+  #
+  timer:
+    wardrobe_light_timer:
+      name: Таймер света в гардеробе
+      duration: "00:00:10"
+      restore: true
+
+  template:
+    binary_sensor:
+      - name: binary_sensor_wardrobe_light_on_witout_motion
+        state: >
+          {{ 
+            states('binary_sensor.motion_wardrobe_occupancy') == 'off'
+            and states('switch.switch_wardrobe_up') == 'on' 
+          }}
+        unique_id: binary_sensor_wardrobe_light_on_witout_motion
+
+  automation:
+    - id: wardrobe_light_on_witout_motion
+      alias: Включение света в гардеробной
+      triggers:
+        - trigger: state
+          entity_id: binary_sensor.motion_wardrobe_occupancy
+          to: "on"
+      conditions:
+        - condition: state
+          entity_id: switch.switch_wardrobe_up
+          state:
+            - "off"
+            - "unknown"
+      actions:
+        action: switch.turn_on
+        entity_id: switch.switch_wardrobe_up
+    #=====================================================
+    - id: wardrobe_light_off
+      alias: Выключение света в гардеробной
+      triggers:
+        # - trigger: state
+        #   entity_id: binary_sensor.motion_wardrobe_occupancy
+        #   to: "off"
+        - trigger: event
+          event_type: timer.finished
+          event_data:
+            entity_id: timer.wardrobe_light_timer
+      conditions:
+        - condition: state
+          entity_id: switch.switch_wardrobe_up
+          state: "on"
+      actions:
+        action: switch.turn_off
+        entity_id: switch.switch_wardrobe_up
+    #=======================================================
+    - id: wardrobe_timer_start
+      alias: Запуск таймера при включении света в гардеробе
+      triggers:
+        - trigger: state
+          entity_id: binary_sensor.binary_sensor_wardrobe_light_on_witout_motion
+          to: "on"
+      actions:
+        - action: timer.start
+          entity_id: timer.wardrobe_light_timer
+    #======================================================
+    - id: wardrobe_timer_cancel
+      alias: Отмена таймера света в гардеробе
+      triggers:
+        - trigger: state
+          entity_id: binary_sensor.binary_sensor_wardrobe_light_on_witout_motion
+          to: "off"
+      actions:
+        - action: timer.cancel
+          entity_id: timer.wardrobe_light_timer

@@ -1,0 +1,67 @@
+- id: "1740563516926"
+  alias: Я дома
+  description: ""
+  triggers:
+    - trigger: state
+      entity_id:
+        - input_boolean.alex
+      from: "off"
+      to: "on"
+  conditions: []
+  actions:
+    - action: notify.mobile_app_iphone_aleksandr
+      metadata: {}
+      data:
+        message: Я дома
+  mode: single
+#====================================================
+- id: "1740563587967"
+  alias: Я не дома
+  description: ""
+  triggers:
+    - trigger: state
+      entity_id:
+        - input_boolean.alex
+      from: "on"
+      to: "off"
+  conditions: []
+  actions:
+    - action: notify.mobile_app_iphone_aleksandr
+      metadata: {}
+      data:
+        message: Я не дома
+  mode: single
+#====================================================
+- id: "1740591093040"
+  alias: At www5
+  description: ""
+  triggers:
+    - trigger: state
+      entity_id:
+        - sensor.iphone_aleksandr_ssid
+      from:
+      to: WWW5
+  conditions: []
+  actions:
+    - action: notify.mobile_app_iphone_aleksandr
+      metadata: {}
+      data:
+        message: At www5
+  mode: single
+#====================================================
+- id: "1740591197979"
+  alias: At lte
+  description: ""
+  triggers:
+    - trigger: state
+      entity_id:
+        - sensor.iphone_aleksandr_connection_type
+      from:
+      to: Cellular
+  conditions: []
+  actions:
+    - action: notify.mobile_app_iphone_aleksandr
+      metadata: {}
+      data:
+        message: At LTE
+  mode: single

@@ -1,0 +1,6 @@
+test_light_brightness: 
+  name: Яркость тестовой люстры
+  initial: 254
+  min: 0
+  max: 254
+  step: 1
