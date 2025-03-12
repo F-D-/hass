@@ -65,7 +65,7 @@ bedroom_marina:
         #           rgb_color: "{{ color }}"
         #       - delay: 2
 
-    #===================================================
+   #===================================================
     - id: dimmer_v_spalne_mariny_izmenit_iarkost
       alias: Диммер в спальне Марины изменить яркость
       triggers:
