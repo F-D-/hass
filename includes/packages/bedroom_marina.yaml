@@ -15,38 +15,56 @@ bedroom_marina:
         - trigger: state
           entity_id: sensor.dimmer_bedroom_marina_action
           to: single
-      # triggers:
-      #   - trigger: mqtt
-      #     topic: zigbee2mqtt_1/switch_kitchen_hall/action
-      #     payload: single_left
       conditions: []
       actions:
         - action: light.toggle
           entity_id:  
               - light.lamp_big_bedroom_marina_white
               - light.lamp_small_bedroom_marina
-        # - choose:
-        #   - conditions:
-        #     - condition: state
-        #       entity_id: light.lamp_big_bedroom_marina_white
-        #       state: "on"
+
+    - id: dimmer_v_spalne_mariny_vkluchenie_maksimalnoy_yarkosti
+      alias: Диммер в спальне Марины включение максимальной яркости
+      triggers:
+        - trigger: state
+          entity_id: sensor.dimmer_bedroom_marina_action
+          to: double
+      actions:
+        - action: light.turn_on
+          entity_id:  
+              - light.lamp_big_bedroom_marina_white
+              - light.lamp_small_bedroom_marina
+          data:
+            brightness: 254
+            color_temp_kelvin: 4000
+
+    - id: dimmer_v_spalne_mariny_perekluchenie_cvetov
+      alias: Диммер в спальне Марины переключение цветов
+      triggers:
+        - trigger: state
+          entity_id: sensor.dimmer_bedroom_marina_action
+          to: hold
+      actions: 
+        - action: light.toggle
+          entity_id: light.lamp_big_bedroom_marina_rgb
+        # - variables:
+        #     colors:
+        #       - [255,0,0]
+        #       - [0,255,0]
+        #       - [0,0,255]
+        # - repeat:
+        #     while:
+        #       - condition: state
+        #         entity_id: sensor.dimmer_bedroom_marina_action
+        #         state: "hold"
         #     sequence:
-        #       - action: light.turn_off
-        #         target:
-        #           entity_id: 
-        #             - light.lamp_big_bedroom_marina_white
-        #             - light.lamp_small_bedroom_marina
-        #   - conditions:
-        #     - condition: state
-        #       entity_id: light.lamp_big_bedroom_marina_white
-        #       state: "off"
-        #     sequence:
+        #       - variables:
+        #           color: '{{ colors[(repeat.index % (colors | count)) - 1] }}'
         #       - action: light.turn_on
-        #         target:
-        #           entity_id: 
-        #             - light.lamp_big_bedroom_marina_white
-        #             - light.lamp_small_bedroom_marina 
-      mode: single
+        #         entity_id: light.lamp_big_bedroom_marina_rgb
+        #         data:
+        #           rgb_color: "{{ color }}"
+        #       - delay: 2
+
     #===================================================
     - id: dimmer_v_spalne_mariny_izmenit_iarkost
       alias: Диммер в спальне Марины изменить яркость
