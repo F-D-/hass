@@ -155,7 +155,7 @@ toilet_light:
         - trigger: state
           entity_id: switch.switch_toilet_up
           to: "on"
-      conditons:
+      conditions:
           #если движения не обнаружено
         - condition: state
           entity_id: binary_sensor.motion_toilet_occupancy
