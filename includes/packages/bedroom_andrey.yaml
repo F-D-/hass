@@ -63,8 +63,11 @@ bedroom_andrey:
                   entity_id: light.lamp_bedroom_andrey_white
                 data_template:
                   brightness: >-
-                    {# ((state_attr('sensor.lamp_bedroom_andrey_attr', 'brightness_white') | int(1)) + (trigger.to_state.state | float) * 2) | int(1) #}
-                    {{ ((state_attr('sensor.lamp_bedroom_andrey_attr', 'brightness_white') | int(1)) + (trigger.to_state.state | float) * 2.55) | int(1) }}
+                    {% set start_brightness = state_attr('sensor.lamp_bedroom_andrey_attr', 'brightness_white') %}
+                    {% if is_state('light.lamp_bedroom_andrey_white', 'off') %}
+                    {% set start_brightness = 0 %}
+                    {% endif %}
+                    {{ (start_brightness + (trigger.to_state.state | float) * 2.55) | int(1) }}
                   transition: 1
 
           - conditions:
