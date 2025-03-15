@@ -3,11 +3,19 @@ toilet_light:
   timer:
     toilet_light_off_timer:
       name: Таймер на выключение света в туалете
-      duration: "00:00:10"
+      duration: "00:00:05"
+      restore: true
+    toilet_light_off_when_forgot_close_dood_timer:
+      name: Таймер на выключение света в туалете если забыли закрыть дверь
+      duration: "00:01:00"
       restore: true
     toilet_long_time_light_timer:
       name: Таймер на случай долгого включенного света в туалете
-      duration: "00:30:00"
+      duration: "00:20:00"
+      restore: true
+    toilet_door_long_open_timer:
+      name: Таймер на сколько была открыта дверь
+      duration: "00:00:10"
       restore: true
         
 
@@ -16,104 +24,147 @@ toilet_light:
       alias: По открытию двери запустить таймер или включить свет
       
       triggers:
+          #дверь открывается 
         - trigger: state
           entity_id: binary_sensor.door_toilet_contact
           to: "on"
       actions:
         - choose:
             - conditions:
+                  #если свет выключен
                 - condition: state
                   entity_id: switch.switch_toilet_up
                   state: "off"
               sequence:
+                  #включить свет
                 - action: switch.turn_on
                   entity_id: switch.switch_toilet_up
+                  #отменить таймер который выключает свет
                 - action: timer.cancel
                   entity_id: timer.toilet_light_off_timer  
+                  #запустить таймер который выключит свет через несколько минут, на случай ошибок сценария
                 - action: timer.start
                   entity_id: timer.toilet_long_time_light_timer
+                  #запустить таймер который выключит свет через несколько минут, если забыли закрыть дверь
+                - action: timer.start
+                  entity_id: timer.toilet_light_off_when_forgot_close_dood_timer
+                  #запустить таймер который считает сколько дверь была открыта
+                - action: timer.start
+                  entity_id: timer.toilet_door_long_open_timer
             - conditions:
+                  #если свет включен
                 - condition: state
                   entity_id: switch.switch_toilet_up
                   state: "on"
+                  #если движение обнаружено
                 - condition: state
                   entity_id: binary_sensor.motion_toilet_occupancy
                   state: "on"
               sequence:
+                  #запустить таймер на отключение света
                 - action: timer.start
                   entity_id: timer.toilet_light_off_timer
-#===================================================
-    # - id: toilet_start_timer_by_open_door
-    #   alias: В туалете запустить таймер по открытии двери
-
-    #   trigger:
-    #     - trigger: state
-    #       entity_id: binary_sensor.door_toilet_contact
-    #       to: "on"
-
-    #   condition:
-    #     - condition: state
-    #       entity_id: switch.switch_toilet_up
-    #       state: "on"
-    #     - condition: state
-    #       entity_id: binary_sensor.motion_toilet_occupancy
-    #       state: "on"
-
-    #   action:
-    #     - action: timer.start
-    #       target:
-    #         entity_id: timer.toilet_light_off_timer
+            - conditions:
+                  #если свет включен
+                - condition: state
+                  entity_id: switch.switch_toilet_up
+                  state: "on"
+              sequence:
+                  #отменить таймер на отключение света
+                - action: timer.cancel
+                  entity_id: timer.toilet_light_off_timer
 #===================================================
     - id: toilet_start_timer_by_close_door
-      alias: В туалете запустить таймер по зактрытию двери
+      alias: В туалете запустить таймер по закрытию двери
 
       trigger:
+          #дверь закрывается
         - trigger: state
           entity_id: binary_sensor.door_toilet_contact
           to: "off"
-
-      condition:
-        - condition: state
-          entity_id: switch.switch_toilet_up
-          state: "on"
-        - condition: state
-          entity_id: binary_sensor.motion_toilet_occupancy
-          state: "off"
-
-      action:
-        - action: timer.start
-          target:
-            entity_id: timer.toilet_light_off_timer
-
+      actions:
+        choose:
+        # если отктыть дверь и сразу закрыть - включить и сразу выключить свет
+        - conditions:
+              #если свет включен
+            - condition: state
+              entity_id: switch.switch_toilet_up
+              state: "on"
+              #если движение не обнаружено
+            - condition: state
+              entity_id: binary_sensor.motion_toilet_occupancy
+              state: "off"
+          sequence:
+              #запустить таймер который выключает свет
+            - action: timer.start
+              entity_id: timer.toilet_light_off_timer
+        - conditions:
+              #если свет включен
+            - condition: state
+              entity_id: switch.switch_toilet_up
+              state: "on"
+              #если движение обнаружено
+            - condition: state
+              entity_id: binary_sensor.motion_toilet_occupancy
+              state: "on"
+          sequence:
+              choose:
+              - conditions:
+                - condition: state
+                  entity_id: timer.toilet_door_long_open_timer
+                  state: "idle"
+                sequence:
+                  - action: timer.cancel
+                    entity_id: timer.toilet_light_off_when_forgot_close_dood_timer
+                  - action: timer.start
+                    entity_id: timer.toilet_light_off_timer
     #========================================
     - id: toilet_light_off_when_timers_finish
       alias: Выключение света в туалете по завершении таймеров
       triggers:
+          #таймер на выключение света заканчивается
         - trigger: event
           event_type: timer.finished
           event_data:
             entity_id: timer.toilet_light_off_timer
+          #таймер который выключит свет через несколько минут, на случай ошибок сценария заканчивается
         - trigger: event
           event_type: timer.finished
           event_data:
             entity_id: timer.toilet_long_time_light_timer
+          #таймер который выключит свет через несколько минут, если забыли закрыть дверь заканчивается
+        - trigger: event
+          event_type: timer.finished
+          event_data:
+            entity_id: timer.toilet_light_off_when_forgot_close_dood_timer
       action:
+          #выключить свет
         - action: switch.turn_off
           entity_id: switch.switch_toilet_up
+          #отменить все таймеры
         - action: timer.cancel
           entity_id: 
             - timer.toilet_long_time_light_timer
             - timer.toilet_light_off_timer
-
-    # - id: toilet_light_off_long_timer_finish
-    #   alias: Выключение света в туалете по завершении длинного таймера
-    #   trigger:
-    #     - platform: event
-    #       event_type: timer.finished
-    #       event_data:
-    #         entity_id: timer.toilet_long_time_light_timer
-    #   action:
-    #     - action: switch.turn_off
-    #       entity_id: switch.switch_toilet_up
-    #     - action: timer.cancel
-    #       entity_id: timer.toilet_long_time_light_timer
+            - timer.toilet_light_off_when_forgot_close_dood_timer
+#============================================= 
+    - id: toilet_manual_light_on
+      alias: Включение света в туалете вручную
+      triggers:
+          #свет включается
+        - trigger: state
+          entity_id: switch.switch_toilet_up
+          to: "on"
+      conditons:
+            #если двежения не обнаружено
+          - condition: state
+            entity_id: binary_sensor.motion_toilet_occupancy
+            state: "off"
+            #если дверь закрыта
+          - condition: state
+            entity_id: binary_sensor.door_toilet_contact
+            state: "off"
+      action:
+          #запустить таймер на выключение света
+        - action: timer.start
+          entity_id: timer.toilet_light_off_timer
