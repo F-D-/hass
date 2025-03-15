@@ -156,15 +156,15 @@ toilet_light:
           entity_id: switch.switch_toilet_up
           to: "on"
       conditons:
-            #если двежения не обнаружено
-          - condition: state
-            entity_id: binary_sensor.motion_toilet_occupancy
-            state: "off"
-            #если дверь закрыта
-          - condition: state
-            entity_id: binary_sensor.door_toilet_contact
-            state: "off"
-      action:
+          #если движения не обнаружено
+        - condition: state
+          entity_id: binary_sensor.motion_toilet_occupancy
+          state: "off"
+          #если дверь закрыта
+        - condition: state
+          entity_id: binary_sensor.door_toilet_contact
+          state: "off"
+      actions:
           #запустить таймер на выключение света
         - action: timer.start
           entity_id: timer.toilet_light_off_timer
