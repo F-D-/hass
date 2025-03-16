@@ -5,12 +5,13 @@ bath_light:
           #Включить свет
         - action: swtitch.turn_on
           #Если ночь, включить подсветку, если день включить основной свет
-          entity_id: >
-            {% if is_state("binary_sensor.is_night",  "on") %}
-            switch.backlight_bath
-            {% else %}
-            switch.switch_bath_up
-            {% endif %} 
+          data_template:
+            entity_id: >
+              {% if is_state("binary_sensor.is_night",  "on") %}
+              switch.backlight_bath
+              {% else %}
+              switch.switch_bath_up
+              {% endif %} 
 #===================================================
   automation:
     - id: svet_v_vannoy_vkluchit_po_datchiku_dvizhenia
@@ -22,13 +23,13 @@ bath_light:
           to: "on"
       condition:
           #Если свет выключен
-        - condition: state
+        - condition: template
           #Если ночь, то проверить подсветку, если день - основной свет
-          entity_id: > 
+          value_template: > 
             {% if is_state("binary_sensor.is_night",  "on") %}
-            switch.backlight_bath
+            {{ states ("switch.backlight_bath") == "on" }}
             {% else %}
-            switch.switch_bath_up
+            {{ states ("switch.switch_bath_up") == "on" }}
             {% endif %} 
           state: "off"
       action:
