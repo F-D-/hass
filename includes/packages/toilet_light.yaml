@@ -73,6 +73,9 @@ toilet_light:
                   #отменить таймер на отключение света
                 - action: timer.cancel
                   entity_id: timer.toilet_light_off_timer
+                  #запустить таймер который считает сколько дверь была открыта
+                - action: timer.start
+                  entity_id: timer.toilet_door_long_open_timer
 #===================================================
     - id: toilet_start_timer_by_close_door
       alias: В туалете запустить таймер по закрытию двери
