@@ -15,17 +15,12 @@ bedroom_andrey:
         - trigger: state
           entity_id: sensor.dimmer_bedroom_andrey_action
           to: single
-      # triggers:
-      #   - trigger: mqtt
-      #     topic: zigbee2mqtt_1/switch_kitchen_hall/action
-      #     payload: single_left
       conditions: []
       actions:
         - action: light.toggle
           entity_id: light.lamp_bedroom_andrey_white
       mode: single
-    #===================================================
-
+#===================================================
     - id: dimmer_v_spalne_andreia_vkluchenie_maximalnoy_yarkosti
       alias: Диммер в спальне Андрея включение максимальной яркости
       triggers:
@@ -38,7 +33,17 @@ bedroom_andrey:
           data:
             brightness: 254
             color_temp_kelvin: 4000
-      
+#===================================================
+    - id: dimmer_v_spalne_andreya_perekluchenie_cvetovogo_kolca
+      alias: Диммер в спальне Андрея переключение цветового кольца
+      triggers:
+        - trigger: state
+          entity_id: sensor.dimmer_bedroom_marina_action
+          to: hold
+      actions: 
+        - action: light.toggle
+          entity_id: light.lamp_big_bedroom_marina_rgb
+#===================================================
     - id: dimmer_v_spalne_andreia_izmenit_iarkost
       alias: Диммер в спальне Андрея изменить яркость
       triggers:
