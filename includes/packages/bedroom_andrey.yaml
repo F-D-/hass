@@ -44,7 +44,7 @@ bedroom_andrey:
         - action: light.toggle
           entity_id: light.lamp_big_bedroom_marina_rgb
 #===================================================
-    - id: dimmer_v_spalne_andreia_izmenit_iarkost
+    - id: dimmer_v_spalne_andreia_izmenit_iarkst
       alias: Диммер в спальне Андрея изменить яркость
       triggers:
         - trigger: state
@@ -88,3 +88,15 @@ bedroom_andrey:
                   color_temp: >-
                     {{ ((state_attr('sensor.lamp_bedroom_andrey_attr', 'color_temp_white') | int(1)) + (trigger.to_state.state | float) * 2.17) | int(1) }}
                   transition: 1
+#===================================================
+    - id: perekluchenie_sveta_v_spalne_andreya_po_knopke
+      alias: Переключение света в спальне Андрея по кнопке
+      triggers:
+        - trigger: state
+          entity_id: sensor.0x00158d00097078af_action
+          to: "single"
+      actions:
+        - action: light.toggle
+          data:
+            brightness: 254
+            color_temp_kelvin: 4000
