@@ -44,7 +44,7 @@ bedroom_andrey:
         - action: light.toggle
           entity_id: light.lamp_big_bedroom_marina_rgb
 #===================================================
-    - id: dimmer_v_spalne_andreia_izmenit_iarkst
+    - id: dimmer_v_spalne_andreia_izmenit_iarkost
       alias: Диммер в спальне Андрея изменить яркость
       triggers:
         - trigger: state
