@@ -1,8 +1,6 @@
 homeassistant:
   packages: !include_dir_merge_named includes/packages
-  customize:
-    light.lamp_big_bedroom_marina_white:
-      entity_picture: /local/entity_image/aqara_t1m.png
+  customize: !include_dir_merge_named includes/customize
       
 
 # Loads default set of integrations. Do not remove.
