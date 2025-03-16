@@ -137,6 +137,11 @@ toilet_light:
           event_type: timer.finished
           event_data:
             entity_id: timer.toilet_light_off_when_forgot_close_door_timer
+      conditions:
+          #если свет включен
+        - condition: state
+          entity_id: switch.switch_toilet_up
+          state: "on"
       action:
           #выключить свет
         - action: switch.turn_off
@@ -168,3 +173,18 @@ toilet_light:
           #запустить таймер на выключение света
         - action: timer.start
           entity_id: timer.toilet_light_off_timer
+#============================================= 
+    - id: toilet_manual_light_off
+      alias: Выключение света в туалете вручную
+      triggers:
+          #свет выключается
+        - trigger: state
+          entity_id: switch.switch_toilet_up
+          to: "off"
+      action:
+          #отменить все таймеры
+        - action: timer.cancel
+          entity_id: 
+            - timer.toilet_long_time_light_timer
+            - timer.toilet_light_off_timer
+            - timer.toilet_light_off_when_forgot_close_door_timer
