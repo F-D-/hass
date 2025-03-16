@@ -5,7 +5,7 @@ toilet_light:
       name: Таймер на выключение света в туалете
       duration: "00:00:05"
       restore: true
-    toilet_light_off_when_forgot_close_dood_timer:
+    toilet_light_off_when_forgot_close_door_timer:
       name: Таймер на выключение света в туалете если забыли закрыть дверь
       duration: "00:01:00"
       restore: true
@@ -47,7 +47,7 @@ toilet_light:
                   entity_id: timer.toilet_long_time_light_timer
                   #запустить таймер который выключит свет через несколько минут, если забыли закрыть дверь
                 - action: timer.start
-                  entity_id: timer.toilet_light_off_when_forgot_close_dood_timer
+                  entity_id: timer.toilet_light_off_when_forgot_close_door_timer
                   #запустить таймер который считает сколько дверь была открыта
                 - action: timer.start
                   entity_id: timer.toilet_door_long_open_timer
@@ -63,7 +63,7 @@ toilet_light:
               sequence:
                   #запустить таймер который выключит свет через несколько минут, если забыли закрыть дверь
                 - action: timer.start
-                  entity_id: timer.toilet_long_time_light_timer
+                  entity_id: timer.toilet_light_off_when_forgot_close_door_timer
             - conditions:
                   #если свет включен
                 - condition: state
@@ -109,7 +109,7 @@ toilet_light:
               state: "on"
           sequence:
             - action: timer.cancel
-              entity_id: timer.toilet_light_off_when_forgot_close_dood_timer
+              entity_id: timer.toilet_light_off_when_forgot_close_door_timer
             - choose:
               - conditions:
                 - condition: state
@@ -136,7 +136,7 @@ toilet_light:
         - trigger: event
           event_type: timer.finished
           event_data:
-            entity_id: timer.toilet_light_off_when_forgot_close_dood_timer
+            entity_id: timer.toilet_light_off_when_forgot_close_door_timer
       action:
           #выключить свет
         - action: switch.turn_off
@@ -146,7 +146,7 @@ toilet_light:
           entity_id: 
             - timer.toilet_long_time_light_timer
             - timer.toilet_light_off_timer
-            - timer.toilet_light_off_when_forgot_close_dood_timer
+            - timer.toilet_light_off_when_forgot_close_door_timer
 #============================================= 
     - id: toilet_manual_light_on
       alias: Включение света в туалете вручную
