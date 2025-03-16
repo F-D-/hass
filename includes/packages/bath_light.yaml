@@ -3,7 +3,7 @@ bath_light:
     light_turn_on_depending_on_daytime:
       sequence:
           #Включить свет
-        - action: swtitch.turn_on
+        - action: switch.turn_on
           #Если ночь, включить подсветку, если день включить основной свет
           data_template:
             entity_id: >
