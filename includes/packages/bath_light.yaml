@@ -1,12 +1,4 @@
 bath_light:
-  binary_sensor:
-      # Сенсор указываюший ночь сейсас или нет
-    - platform: tod
-      name: is_night
-      after: '22:00'
-      before: sunrise
-      before_offset: "01:00"
-#===================================================
   script:
     light_turn_on_depending_on_daytime:
       sequence:

@@ -19,6 +19,7 @@ template: !include includes/templates.yaml
 light: !include includes/light.yaml
 timer: !include includes/timer.yaml
 input_number: !include includes/input_number.yaml
+binary_sensor: !include includes/binary_sensor.yaml
 
 panel_custom:
   - name: server_state
