@@ -99,3 +99,4 @@ bedroom_andrey:
           data:
             brightness: 254
             color_temp_kelvin: 4000
+            transition: 1
