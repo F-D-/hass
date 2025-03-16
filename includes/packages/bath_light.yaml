@@ -27,8 +27,6 @@ bath_light:
           #Если ночь, то проверить подсветку, если день - основной свет
           value_template: > 
             {% if is_state("binary_sensor.is_night",  "on") %}
-            {{ states ("switch.backlight_bath") == "off" }}
-            {% else %}
             {{ states ("switch.switch_bath_up") == "off" }}
             {% endif %} 
       action:
@@ -89,10 +87,10 @@ bath_light:
         - trigger: state
           entity_id: binary_sensor.door_bath_contact
           to: "on" 
-      # conditions:
-      #   - condition: state
-      #     entity_id: binary_sensor.motion_bath_occupancy
-      #     state: "on"
+      conditions:
+        - condition: state
+          entity_id: switch.fan_bath
+          state: "on"
       actions:
         - action: switch.turn_off
           entity_id: switch.fan_bath
