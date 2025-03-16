@@ -1,64 +1,107 @@
 bath_light:
-  switch:
-    - platform: template
-      switches:
-        my_test_switch:
-          value_template: "{{ states('light.test_light') }}"
-          turn_on:
-            action: light.turn_on
-            target:
-              entity_id: light.test_light
-          turn_off:
-            action: light.turn_off
-            target:
-              entity_id: light.test_light
-
+  binary_sensor:
+      # Сенсор указываюший ночь сейсас или нет
+    - platform: tod
+      name: is_night
+      after: '22:00'
+      before: sunrise
+      before_offset: "01:00"
+#===================================================
+  script:
+    light_turn_on_depending_on_daytime:
+      sequence:
+          #Включить свет
+        - action: swtitch.turn_on
+          #Если ночь, включить подсветку, если день включить основной свет
+          entity_id: >
+            {% if is_state("binary_sensor.is_night",  "on") %}
+            switch.backlight_bath
+            {% else %}
+            switch.switch_bath_up
+            {% endif %} 
+#===================================================
   automation:
-    - id: bath_light_on
-      alias: Свет в ванной включить
-      trigger:
-        - platform: state
+    - id: svet_v_vannoy_vkluchit_po_datchiku_dvizhenia
+      alias: Свет в ванной включить по датчику движения
+      triggers:
+          #Обнаруживается движение
+        - trigger: state
           entity_id: binary_sensor.motion_bath_occupancy
           to: "on"
       condition:
+          #Если свет выключен
         - condition: state
-          entity_id: switch.my_test_switch
+          #Если ночь, то проверить подсветку, если день - основной свет
+          entity_id: > 
+            {% if is_state("binary_sensor.is_night",  "on") %}
+            switch.backlight_bath
+            {% else %}
+            switch.switch_bath_up
+            {% endif %} 
           state: "off"
       action:
-        - action: switch.turn_on
-          target:
-            entity_id: switch.my_test_switch
-        # - action: notify.mobile_app_iphone_aleksandr
-        #   metadata: {}
-        #   data:
-        #     message: Свет в ванной включить
-    #===================================================
-    - id: bath_light_off
+          #Запустить скрипт включающий свет разной интенсивности в зависимости от времени суток
+        - action: script.turn_on
+          entity_id: script.light_turn_on_depending_on_daytime
+  #===================================================
+    - id: svet_v_vannoy_vikluchit
       alias: Свет в ванной выключить
-      trigger:
-        - platform: state
+      triggers:
+          #Движение не обнаруживается
+        - trigger: state
           entity_id: binary_sensor.motion_bath_occupancy
           to: "off"
-          for: "00:01:00"
       condition:
+          #Если дверь открыта
         - condition: state
-          entity_id: switch.my_test_switch
+          entity_id: binary_sensor.door_bath_contact
           state: "on"
       action:
+        #Выключить весь свет
         - action: switch.turn_off
-          target:
-            entity_id: switch.my_test_switch
-        # - action: notify.mobile_app_iphone_aleksandr
-        #   metadata: {}
-        #   data:
-        #     message: Свет в ванной выключить
-    #========================================
-    - id: bath_light_notify
-      alias: Уведомление о свете в ванной
-      trigger:
-        - platform: state
-          entity_id: switch.my_test_switch
-      action:
-        - action: notify.mobile_app_iphone_aleksandr
-          data:
-            message: "Свет в ванной {{ trigger.to_state.state }}"
+          entity_id: 
+            - switch.backlight_bath
+            - switch.switch_bath_up
+#===================================================
+    - id: vkluchit_ventilaciyu_vruchnuyu
+      alias: Выключить вентиляцию вручную
+      triggers:
+        - trigger: state
+          entity_id: sensor.fan_bath_action
+          state: "single_down" 
+      conditions:
+        - condition: state
+          entity_id: switch.fan_bath
+          state: "on"
+      actions:
+        - action: switch.turn_on
+          entity_id: switch.fan_bath
+#===================================================
+    - id: vkluchit_ventilaciyu_avtomaticheski
+      alias: Включить вентиляцию автоматически
+      triggers:
+        - trigger: state
+          entity_id: binary_sensor.door_bath_contact
+          state: "off" 
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.motion_bath_occupancy
+          state: "on"
+      actions:
+        - action: switch.turn_on
+          entity_id: switch.fan_bath
+#===================================================
+    - id: vykluchit_ventilaciyu_avtomaticheski
+      alias: Выключить вентиляцию автоматически
+      triggers:
+        - trigger: state
+          entity_id: binary_sensor.door_bath_contact
+          state: "on" 
+      # conditions:
+      #   - condition: state
+      #     entity_id: binary_sensor.motion_bath_occupancy
+      #     state: "on"
+      actions:
+        - action: switch.turn_off
+          entity_id: switch.fan_bath
+#===================================================
