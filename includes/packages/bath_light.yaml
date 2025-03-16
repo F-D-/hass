@@ -27,9 +27,9 @@ bath_light:
           #Если ночь, то проверить подсветку, если день - основной свет
           value_template: > 
             {% if is_state("binary_sensor.is_night",  "on") %}
-            {{ states ("switch.backlight_bath") == "on" }}
+            {{ states ("switch.backlight_bath") == "off" }}
             {% else %}
-            {{ states ("switch.switch_bath_up") == "on" }}
+            {{ states ("switch.switch_bath_up") == "off" }}
             {% endif %} 
       action:
           #Запустить скрипт включающий свет разной интенсивности в зависимости от времени суток
