@@ -31,7 +31,6 @@ bath_light:
             {% else %}
             {{ states ("switch.switch_bath_up") == "on" }}
             {% endif %} 
-          state: "off"
       action:
           #Запустить скрипт включающий свет разной интенсивности в зависимости от времени суток
         - action: script.turn_on
