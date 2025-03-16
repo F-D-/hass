@@ -67,8 +67,8 @@ bath_light:
       alias: Выключить вентиляцию вручную
       triggers:
         - trigger: state
-          entity_id: sensor.fan_bath_action
-          state: "single_down" 
+          entity_id: sensor.switch_bath_action
+          to: "single_down" 
       conditions:
         - condition: state
           entity_id: switch.fan_bath
@@ -82,7 +82,7 @@ bath_light:
       triggers:
         - trigger: state
           entity_id: binary_sensor.door_bath_contact
-          state: "off" 
+          to: "off" 
       conditions:
         - condition: state
           entity_id: binary_sensor.motion_bath_occupancy
@@ -96,7 +96,7 @@ bath_light:
       triggers:
         - trigger: state
           entity_id: binary_sensor.door_bath_contact
-          state: "on" 
+          to: "on" 
       # conditions:
       #   - condition: state
       #     entity_id: binary_sensor.motion_bath_occupancy
