@@ -61,9 +61,9 @@ toilet_light:
                   entity_id: binary_sensor.motion_toilet_occupancy
                   state: "on"
               sequence:
-                  #запустить таймер на отключение света
+                  #запустить таймер который выключит свет через несколько минут, если забыли закрыть дверь
                 - action: timer.start
-                  entity_id: timer.toilet_light_off_timer
+                  entity_id: timer.toilet_long_time_light_timer
             - conditions:
                   #если свет включен
                 - condition: state
@@ -108,14 +108,14 @@ toilet_light:
               entity_id: binary_sensor.motion_toilet_occupancy
               state: "on"
           sequence:
-              choose:
+            - action: timer.cancel
+              entity_id: timer.toilet_light_off_when_forgot_close_dood_timer
+            - choose:
               - conditions:
                 - condition: state
                   entity_id: timer.toilet_door_long_open_timer
                   state: "idle"
                 sequence:
-                  - action: timer.cancel
-                    entity_id: timer.toilet_light_off_when_forgot_close_dood_timer
                   - action: timer.start
                     entity_id: timer.toilet_light_off_timer
     #========================================
