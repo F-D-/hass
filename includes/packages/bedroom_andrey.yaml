@@ -64,8 +64,7 @@ bedroom_andrey:
               state: "released"
             sequence:
               - action: light.turn_on
-                target:
-                  entity_id: light.lamp_bedroom_andrey_white
+                entity_id: light.lamp_bedroom_andrey_white
                 data_template:
                   brightness: >-
                     {% set start_brightness = state_attr('sensor.lamp_bedroom_andrey_attr', 'brightness_white') %}
@@ -81,8 +80,7 @@ bedroom_andrey:
               state: "pressed"
             sequence:
               - action: light.turn_on
-                target:
-                  entity_id: light.lamp_bedroom_andrey_white
+                entity_id: light.lamp_bedroom_andrey_white
                 data_template:
                   #2.17, потому что температура цвета от 153 до 370, а значит от 0 до 217
                   color_temp: >-
@@ -97,6 +95,7 @@ bedroom_andrey:
           to: "single"
       actions:
         - action: light.toggle
+          entity_id: light.lamp_bedroom_andrey_white
           data:
             brightness: 254
             color_temp_kelvin: 4000
