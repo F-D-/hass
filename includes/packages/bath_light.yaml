@@ -36,8 +36,8 @@ bath_light:
         - action: script.turn_on
           entity_id: script.light_turn_on_depending_on_daytime
   #===================================================
-    - id: svet_v_vannoy_vikluchit
-      alias: Свет в ванной выключить
+    - id: svet_v_vannoy_vikluchit_po_datchiku_dvizhenia
+      alias: Свет в ванной выключить по датчику движения
       triggers:
           #Движение не обнаруживается
         - trigger: state
