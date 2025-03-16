@@ -66,7 +66,7 @@ bath_light:
           entity_id: switch.fan_bath
           state: "on"
       actions:
-        - action: switch.turn_on
+        - action: switch.turn_off
           entity_id: switch.fan_bath
 #===================================================
     - id: vkluchit_ventilaciyu_avtomaticheski
