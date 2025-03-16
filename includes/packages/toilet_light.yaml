@@ -202,15 +202,18 @@ toilet_light:
     - id: toilet_fan
       alias: Вентиляции в туалете
       triggers:
+         #Если нажата нижняя кнопка выключателя
         - trigger: state
           id: manual_on_off
           entity_id: sensor.switch_toilet_action
           to: "single_down"
+         #Если свет включен в течении нескольких минут
         - trigger: state
           id: fan_on_when_light_on_for_several_minutes
           entity_id: switch.switch_toilet_up
           to: "on"
           for: "00:05:00"
+         #Если свет выключен в течении нескольких минут
         - trigger: state
           id: fan_off_when_light_off_for_several_minutes
           entity_id: switch.switch_toilet_up
@@ -219,20 +222,34 @@ toilet_light:
       actions:
         choose:
         - conditions:
+            #Если сработал триггер по нажатию на выключатель
             condition: trigger
             id: "manual_on_off"
           sequence:
+            #Перекючить вентиляцию
             action: switch.toggle
             entity_id: switch.fan_toilet
         - conditions:
-            condition: trigger
-            id: "fan_on_when_light_on_for_several_minutes"
+              #Если сработал триггер по включенному несколько минут свету
+            - condition: trigger
+              id: "fan_on_when_light_on_for_several_minutes"
+              #Если вентиляция выключена
+            - condition: state
+              entity_id: switch.fan_toilet
+              state: "off"
           sequence:
+            #Включить вентиляцию
             action: switch.turn_on
             entity_id: switch.fan_toilet
         - conditions:
-            condition: trigger
-            id: "fan_off_when_light_off_for_several_minutes"
+              #Если сработал триггер по выключенному несколько минут свету
+            - condition: trigger
+              id: "fan_off_when_light_off_for_several_minutes"
+              #Если вентиляция включена
+            - condition: state
+              entity_id: switch.fan_toilet
+              state: "on"
           sequence:
+            #Выключить вентиляцию
             action: switch.turn_off
             entity_id: switch.fan_toilet
