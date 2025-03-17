@@ -46,7 +46,7 @@ bedroom_marina:
       actions: 
         - action: light.toggle
           entity_id: light.lamp_big_bedroom_marina_rgb
-   #===================================================
+#===================================================
     - id: dimmer_v_spalne_mariny_izmenit_iarkost
       alias: Диммер в спальне Марины изменить яркость
       triggers:
@@ -67,10 +67,9 @@ bedroom_marina:
               state: "released"
             sequence:
               - action: light.turn_on
-                target:
-                  entity_id: 
-                    - light.lamp_big_bedroom_marina_white
-                    - light.lamp_small_bedroom_marina
+                entity_id: 
+                  - light.lamp_big_bedroom_marina_white
+                  - light.lamp_small_bedroom_marina
                 data_template:
                   brightness: >-
                     {% set start_brightness = state_attr('sensor.lamp_big_bedroom_marina_attr', 'brightness_white') %}
@@ -88,14 +87,46 @@ bedroom_marina:
               - variables:
                   brightness: "{{ state_attr('sensor.lamp_bedroom_andrey_attr', 'brightness_white') |  int(1) }}"
               - action: light.turn_on
-                target:
-                  entity_id: 
-                    - light.lamp_big_bedroom_marina_white
-                    - light.lamp_small_bedroom_marina
+                entity_id: 
+                  - light.lamp_big_bedroom_marina_white
+                  - light.lamp_small_bedroom_marina
                 data_template:
                   #2.17, потому что температура цвета от 153 до 370, а значит от 0 до 217
                   color_temp: >-
                     {{ ((state_attr('sensor.lamp_big_bedroom_marina_attr', 'color_temp_white') | int(1)) + (trigger.to_state.state | float) * 2.17) | int(1) }}
                   brightness: "{{ brightness }}"
                   transition: 1
-
+#===================================================
+    - id: perekluchenie_sveta_i_cveta_v_spalne_mariny_po_vykluchatelu
+      alias: Переключение света и цвета в спальне Марины по выключателю
+      triggers:
+        - trigger: state
+          id: single
+          entity_id: sensor.switch_bedroom_marina_action
+          to: "single_down"
+        - trigger: state
+          id: hold
+          entity_id: sensor.switch_bedroom_marina_action
+          to: "hold_down"
+      actions:
+        choose:
+        - conditions:
+            condition: trigger
+            id: "single"
+          sequence:
+            action: light.toggle
+            entity_id: 
+              - light.lamp_big_bedroom_marina_white
+              - light.lamp_small_bedroom_marina
+            data:
+              brightness: 254
+              color_temp_kelvin: 4300
+              transition: 2
+        - conditions:
+            condition: trigger
+            id: "hold"
+          sequence:
+            action: light.toggle
+            entity_id: light.lamp_big_bedroom_marina_rgb
+            data:
+              transition: 2
