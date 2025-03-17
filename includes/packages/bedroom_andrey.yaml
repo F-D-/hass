@@ -32,7 +32,7 @@ bedroom_andrey:
           entity_id: light.lamp_bedroom_andrey_white
           data:
             brightness: 254
-            color_temp_kelvin: 3700
+            color_temp_kelvin: 4300
 #===================================================
     - id: dimmer_v_spalne_andreya_perekluchenie_cvetovogo_kolca
       alias: Диммер в спальне Андрея переключение цветового кольца
@@ -79,14 +79,15 @@ bedroom_andrey:
               entity_id: sensor.dimmer_bedroom_andrey_action_rotation_button_state
               state: "pressed"
             sequence:
+              - variables:
+                brightness: "{{ state_attr('sensor.lamp_bedroom_andrey_attr', 'brightness_white') |  int(1) }}"
               - action: light.turn_on
                 entity_id: light.lamp_bedroom_andrey_white
                 data_template:
                   #2.17, потому что температура цвета от 153 до 370, а значит от 0 до 217
                   color_temp: >-
                     {{ ((state_attr('sensor.lamp_bedroom_andrey_attr', 'color_temp_white') | int(1)) + (trigger.to_state.state | float) * 2.17) | int(1) }}
-                  brightness: >-
-                    {{ state_attr('sensor.lamp_bedroom_andrey_attr', 'brightness_white') |  int(1) }}
+                  brightness: "{{ brightness }}"
                   transition: 1
 #===================================================
     - id: perekluchenie_sveta_v_spalne_andreya_po_knopke
@@ -100,5 +101,5 @@ bedroom_andrey:
           entity_id: light.lamp_bedroom_andrey_white
           data:
             brightness: 254
-            color_temp_kelvin: 3700
+            color_temp_kelvin: 4300
             transition: 2
