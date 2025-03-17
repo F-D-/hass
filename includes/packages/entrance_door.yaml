@@ -14,10 +14,21 @@ entrance_door:
   timer:
     lock_entrance_door_timer:
       name: Таймер входной двери
-      duration: "00:02:00"
+      duration: "00:05:00"
       restore: true
 
   automation:
+    - id: zakrytie_zamka_po_datchiku_zakrytiya_dveri
+      alias: Закрытие замка по датчику закрытия двери
+      triggers:
+        - trigger: state
+          entity_id: binary_sensor.door_entrance_contact
+          to: "off"
+      action:
+        - delay: 1
+        - action: input_boolean.turn_on
+          entity_id: input_boolean.lock_trigger_from_hass
+#==========================================================
     - id: zapusk_taimara_zamka_vkhodnoi_dveri
       alias: Запуск таймара замка входной двери
       triggers:
@@ -27,11 +38,9 @@ entrance_door:
       action:
         - action: timer.start
           entity_id: timer.lock_entrance_door_timer
-        #      data:
-        #        duration: 00:00:10
         - action: input_boolean.turn_off
           entity_id: input_boolean.lock_trigger_from_hass
-    #==========================================================
+#==========================================================
     - id: avtozakrytie_zamka_vkhodnoi_dveri_po_istchenii_taimera
       alias: Автозакрытие замка входной двери по истечении таймера
       triggers:
@@ -42,7 +51,7 @@ entrance_door:
       actions:
         - action: input_boolean.turn_on
           entity_id: input_boolean.lock_trigger_from_hass
-    #==========================================================
+#==========================================================
     - id: reset_timer_if_door_already_closed
       alias: Сброс таймера если дверь уже закрыта
       triggers:
