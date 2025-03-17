@@ -80,7 +80,7 @@ bedroom_andrey:
               state: "pressed"
             sequence:
               - variables:
-                brightness: "{{ state_attr('sensor.lamp_bedroom_andrey_attr', 'brightness_white') |  int(1) }}"
+                  brightness: "{{ state_attr('sensor.lamp_bedroom_andrey_attr', 'brightness_white') |  int(1) }}"
               - action: light.turn_on
                 entity_id: light.lamp_bedroom_andrey_white
                 data_template:
