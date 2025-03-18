@@ -30,17 +30,17 @@ bath_light:
         - trigger: state
           entity_id: binary_sensor.motion_bath_occupancy
           to: "on"
-      condition:
+      conditions:
           #Если свет выключен
         - condition: template
           #Если ночь, то проверить подсветку, если день - основной свет
           value_template: > 
             {% if is_state("binary_sensor.is_night",  "on") %}
-            {{ states ("switch.backlight_bath") == "off" }}
+            {{ is_state ("switch.backlight_bath", "off") }}
             {% else %}
-            {{ states ("switch.switch_bath_up") == "off" }}
+            {{ is_state ("switch.switch_bath_up", "off") }}
             {% endif %} 
-      action:
+      actions:
           #Запустить скрипт включающий свет разной интенсивности в зависимости от времени суток
         - action: script.turn_on
           entity_id: script.light_turn_on_depending_on_daytime
@@ -52,12 +52,12 @@ bath_light:
         - trigger: state
           entity_id: binary_sensor.motion_bath_occupancy
           to: "off"
-      condition:
+      conditions:
           #Если дверь открыта
         - condition: state
           entity_id: binary_sensor.door_bath_contact
           state: "on"
-      action:
+      actions:
         #Выключить весь свет
         - action: switch.turn_off
           entity_id: 
@@ -83,6 +83,9 @@ bath_light:
       triggers:
         - trigger: state
           entity_id: binary_sensor.turn_on_fan_in_bath
+          to:
+            - "on"
+            - "off"
       actions: 
         action: >
           switch.turn_{{ trigger.to_state.state }}
