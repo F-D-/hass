@@ -90,16 +90,34 @@ bedroom_andrey:
                   brightness: "{{ brightness }}"
                   transition: 1
 #===================================================
-    - id: perekluchenie_sveta_v_spalne_andreya_po_knopke
-      alias: Переключение света в спальне Андрея по кнопке
+    - id: perekluchenie_sveta_v_spalne_andreya_po_vykluchatelu
+      alias: Переключение света в спальне Андрея по выключателю
       triggers:
         - trigger: state
-          entity_id: sensor.0x00158d00097078af_action
-          to: "single"
+          id: single
+          entity_id: sensor.switch_bedroom_andrey_action
+          to: "single_down"
+        - trigger: state
+          id: double
+          entity_id: sensor.switch_bedroom_andrey_action
+          to: "double_down"
       actions:
-        - action: light.toggle
-          entity_id: light.lamp_bedroom_andrey_white
-          data:
-            brightness: 254
-            color_temp_kelvin: 4300
-            transition: 2
+        choose:
+        - conditions:
+            condition: trigger
+            id: "single"
+          sequence:
+            action: light.toggle
+            entity_id: light.lamp_bedroom_andrey_white
+            data:
+              brightness: 254
+              color_temp_kelvin: 4300
+              transition: 1
+        - conditions:
+            condition: trigger
+            id: "double"
+          sequence:
+            action: light.toggle
+            entity_id: light.lamp_bedroom_andrey_rgb
+            data:
+              transition: 1
