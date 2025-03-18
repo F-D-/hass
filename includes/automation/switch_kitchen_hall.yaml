@@ -14,7 +14,7 @@
       metadata: {}
       data: {}
       target:
-        entity_id: switch.line_relay_kitchen
+        entity_id: switch.led_line_kitchen
   mode: single
   #====================================================
 - id: "1740500687848"
