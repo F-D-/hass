@@ -96,11 +96,11 @@ bedroom_andrey:
         - trigger: state
           id: single
           entity_id: sensor.switch_bedroom_andrey_action
-          to: "single_down"
+          to: "single_up"
         - trigger: state
           id: double
           entity_id: sensor.switch_bedroom_andrey_action
-          to: "double_down"
+          to: "double_up"
       actions:
         choose:
         - conditions:
