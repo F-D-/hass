@@ -12,6 +12,14 @@ bath_light:
               {% else %}
               switch.switch_bath_up
               {% endif %} 
+  template:
+    binary_sensor:
+      - name: turn_on_fan_in_bath
+        state: >-
+          {{
+            is_state("binary_sensor.door_bath_contact", "off")
+            and states("sensor.air_bath_humidity") | float > 60)
+          }}
 #===================================================
   automation:
     - id: svet_v_vannoy_vkluchit_po_datchiku_dvizhenia
@@ -55,8 +63,8 @@ bath_light:
             - switch.backlight_bath
             - switch.switch_bath_up
 #===================================================
-    - id: vkluchit_ventilaciyu_vruchnuyu
-      alias: Выключить вентиляцию вручную
+    - id: vkluchit_ventilaciyu_v_vannoy_vruchnuyu
+      alias: Выключить вентиляцию в ванной вручную
       triggers:
         - trigger: state
           entity_id: sensor.switch_bath_action
@@ -69,31 +77,13 @@ bath_light:
         - action: switch.turn_off
           entity_id: switch.fan_bath
 #===================================================
-    - id: vkluchit_ventilaciyu_avtomaticheski
-      alias: Включить вентиляцию автоматически
+    - id: perekluchit_ventilaciyu_v_vannoy_avtomaticheski
+      alias: Переключить вентиляцию в ванной автоматически
       triggers:
         - trigger: state
-          entity_id: binary_sensor.door_bath_contact
-          to: "off" 
-      conditions:
-        - condition: state
-          entity_id: binary_sensor.motion_bath_occupancy
-          state: "on"
-      actions:
-        - action: switch.turn_on
-          entity_id: switch.fan_bath
-#===================================================
-    - id: vykluchit_ventilaciyu_avtomaticheski
-      alias: Выключить вентиляцию автоматически
-      triggers:
-        - trigger: state
-          entity_id: binary_sensor.door_bath_contact
-          to: "on" 
-      conditions:
-        - condition: state
-          entity_id: switch.fan_bath
-          state: "on"
-      actions:
-        - action: switch.turn_off
-          entity_id: switch.fan_bath
+          entity_id: binary_sensor.turn_on_fan_in_bath
+      actions: 
+        action: >
+          switch.turn_{{ trigger.to_state.state }}
+        entity_id: switch.fan_bath
 #===================================================
