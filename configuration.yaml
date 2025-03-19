@@ -10,10 +10,6 @@ default_config:
 frontend:
   themes: !include_dir_merge_named themes
 
-resources:
-  - url: /local/community/kiosk-mode/kiosk-mode.js
-    type: module
-
 input_boolean: !include includes/input_boolean.yaml
 # automation: !include automations.yaml
 automation: !include_dir_merge_list includes/automation
