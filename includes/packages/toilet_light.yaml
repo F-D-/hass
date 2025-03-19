@@ -218,7 +218,7 @@ toilet_light:
           id: fan_off_when_light_off_for_several_minutes
           entity_id: switch.switch_toilet_up
           to: "off"
-          for: "00:03:00"
+          for: "00:02:00"
       actions:
         choose:
         - conditions:
