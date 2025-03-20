@@ -3,7 +3,7 @@ wardrobe_light:
   timer:
     wardrobe_light_timer:
       name: Таймер света в гардеробе
-      duration: "00:00:10"
+      duration: "00:00:05"
       restore: true
 
   template:
@@ -20,25 +20,48 @@ wardrobe_light:
     - id: wardrobe_light_on_witout_motion
       alias: Включение света в гардеробной
       triggers:
+          # открывается дверь
         - trigger: state
+          id: door
+          entity_id: binary_sensor.door_wardrobe_contact
+          to: "on"
+          # обнаружено движение
+        - trigger: state
+          id: motion
           entity_id: binary_sensor.motion_wardrobe_occupancy
           to: "on"
       conditions:
+          # если свет выключен
         - condition: state
           entity_id: switch.switch_wardrobe_up
           state:
             - "off"
             - "unknown"
-      actions:
-        action: switch.turn_on
-        entity_id: switch.switch_wardrobe_up
+      choose:
+      - conditions:
+            # если сработал триггер по датчику движения
+          - condition: trigger
+            id: "motion"
+            # если дверь открыта
+          - condition: state
+            entity_id: binary_sensor.door_wardrobe_contact
+            state: "on"
+        sequence:
+          # включить свет
+          action: switch.turn_on
+          entity_id: switch.switch_wardrobe_up
+      - conditions:
+            # если сработал триггер по датчику открытия двери
+          - condition: trigger
+            id: "door"
+        sequence:
+          # включить свет
+          action: switch.turn_on
+          entity_id: switch.switch_wardrobe_up
     #=====================================================
     - id: wardrobe_light_off
       alias: Выключение света в гардеробной
       triggers:
-        # - trigger: state
-        #   entity_id: binary_sensor.motion_wardrobe_occupancy
-        #   to: "off"
         - trigger: event
           event_type: timer.finished
           event_data:
