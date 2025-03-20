@@ -1,15 +1,23 @@
 waterleak_automations:
 
   automation:
-    - id: utechka_v_vannoy_pod_rakovinoy
-      alias: Утечка в ванной под раковиной
+    - id: utechki_vody
+      alias: Утечки воды
       triggers:
         - platform: state
           entity_id: binary_sensor.waterleak_bath_water_leak
           to: "on"
+        - platform: state
+          entity_id: binary_sensor.waterleak_bath_under_bathtab_water_leak
+          to: "on"
       actions:
         - action: notify.mobile_app_iphone_aleksandr
           metadata: {}
-          data:
+          template_data:
             title: Внимание!!!
-            message: Утечка в ванной под раковиной
+            message: >-
+              Утечка в 
+              {{ trigger.idx == 0 }}
+              ванной под раковиной
+              {{ trigger.idx == 1 }}
+              ванной под ванной
