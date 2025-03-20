@@ -27,11 +27,13 @@ waterleak_automations:
               Утечка в 
               {% if trigger.idx == 0 %}
               ванной под раковиной
-              {% if trigger.idx == 1 %}
+              {% elif trigger.idx == 1 %}
               ванной под ванной
-              {% if trigger.idx == 2 %}
+              {% elif trigger.idx == 2 %}
               в гардеробе
-              {% if trigger.idx == 3 %}
+              {% elif trigger.idx == 3 %}
               туалете
-              {% if trigger.idx == 4 %}
-              кухне
+              {% elif trigger.idx == 4 %}
+              кухне 
+              {% endif %}
+
