@@ -3,7 +3,7 @@ wardrobe_light:
   timer:
     wardrobe_light_timer:
       name: Таймер света в гардеробе
-      duration: "00:00:05"
+      duration: "00:00:10"
       restore: true
 
   template:
