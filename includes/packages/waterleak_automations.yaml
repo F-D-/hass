@@ -12,8 +12,7 @@ waterleak_automations:
           to: "on"
       actions:
         - action: notify.mobile_app_iphone_aleksandr
-          metadata: {}
-          template_data:
+          data:
             title: Внимание!!!
             message: >-
               Утечка в 
