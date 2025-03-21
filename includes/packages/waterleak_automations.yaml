@@ -24,7 +24,7 @@ waterleak_automations:
           data:
             title: Внимание!!!
             message: >-
-              Утечка в 
+              Утечка в
               {% if trigger.idx == "0" %}
               ванной под раковиной
               {% elif trigger.idx == "1" %}
