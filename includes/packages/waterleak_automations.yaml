@@ -25,15 +25,15 @@ waterleak_automations:
             title: Внимание!!!
             message: >-
               Утечка в 
-              {% if trigger.idx == 0 %}
+              {% if trigger.idx == "0" %}
               ванной под раковиной
-              {% elif trigger.idx == 1 %}
+              {% elif trigger.idx == "1" %}
               ванной под ванной
-              {% elif trigger.idx == 2 %}
+              {% elif trigger.idx == "2" %}
               в гардеробе
-              {% elif trigger.idx == 3 %}
+              {% elif trigger.idx == "3" %}
               туалете
-              {% elif trigger.idx == 4 %}
+              {% elif trigger.idx == "4" %}
               кухне 
               {% endif %}
 
