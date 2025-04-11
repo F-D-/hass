@@ -26,11 +26,44 @@ toilet_light:
     #   duration: "00:02:00"
     #   restore: true
         
-
+  template:
+    binary_sensor:
+      - name: 'motion_toilet'
+        state: >
+          {{not is_state("sensor.presence_toilet_presence_event", "leave")}}
+        device_class: motion
+        
   automation:
+    - id: toilet_light_on_by_presence_sensor
+      alias: Включить свет по датчику присутствия
+      triggers:
+        - trigger: state
+          entity_id: binary_sensor.motion_toilet
+          to: "on"
+      conditions:
+        - condition: state
+          entity_id: switch.switch_toilet_up
+          state: "off"
+      actions:
+        - action: switch.turn_on
+          entity_id: switch.switch_toilet_up
+#===================================================
+    - id: toilet_light_off_by_presence_sensor
+      alias: Выключить свет по датчику присутствия
+      triggers:
+        - trigger: state
+          entity_id: binary_sensor.motion_toilet
+          to: "off"
+      conditions:
+        - condition: state
+          entity_id: switch.switch_toilet_up
+          state: "on"
+      actions:
+        - action: switch.turn_off
+          entity_id: switch.switch_toilet_up
+#===================================================
     - id: toilet_light_on_by_open_door
       alias: По открытию двери запустить таймер или включить свет
-      
       triggers:
           #дверь открывается 
         - trigger: state
