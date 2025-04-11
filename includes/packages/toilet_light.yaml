@@ -32,6 +32,7 @@ toilet_light:
         state: >
           {{not is_state("sensor.presence_toilet_presence_event", "leave")}}
         device_class: motion
+        unique_id: presence_to_motion_toilet
         
   automation:
     - id: toilet_light_on_by_presence_sensor
