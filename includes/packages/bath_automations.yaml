@@ -1,4 +1,4 @@
-bath_light:
+bath_automations:
   script:
     light_turn_on_depending_on_daytime:
       sequence:
@@ -21,6 +21,20 @@ bath_light:
             and states("sensor.air_bath_humidity") | float > 60
           }}
         unique_id: turn_on_fan_in_bath
+      - name: turn_on_toweldryer_in_bath
+        state: >-
+          {{
+            is_state("binary_sensor.door_bath_contact", "off")
+            and states("sensor.air_toweldryer_bath_humidity") | float > 40
+          }}
+        unique_id: turn_on_toweldryer_in_bath
+      - name: waterleak_in_bath
+        state: >-
+          {{
+            is_state("binary_sensor.waterleak_bath_water_leak", "on")
+            or is_state("binary_sensor.waterleak_bath_under_bathtab_water_leak", "on")
+          }}
+        unique_id: waterleak_in_bath
 #===================================================
   automation:
     - id: svet_v_vannoy_vkluchit_po_datchiku_dvizhenia
@@ -91,3 +105,57 @@ bath_light:
           switch.turn_{{ trigger.to_state.state }}
         entity_id: switch.fan_bath
 #===================================================
+    - id: perekluchit_polotencesushitel_v_vannoy
+      alias: Переключить полотенцесушитель в ванной
+      triggers:
+        - trigger: state
+          entity_id: binary_sensor.turn_on_toweldryer_in_bath
+          to:
+            - "on"
+            - "off"
+      actions: 
+        action: >
+          switch.turn_{{ trigger.to_state.state }}
+        entity_id: switch.relay_toweldryer_bath
+#===================================================
+    - id: perecryt_vodu_pri_utechke_v_vannoy
+      alias: Перекрыть воду при утечке в ванной
+      triggers:
+        - trigger: state
+          entity_id: binary_sensor.waterleak_in_bath
+          to: "on"
+      actions: 
+        - action: switch.turn_off
+          entity_id: 
+            - switch.hot_water_tap_bath
+            - switch.cold_water_tap_bath
+#===================================================
+    - id: uvedomlenie_o_perecrytii_vody
+      alias: Уведомление о перекрытии воды
+      triggers:
+        - trigger: mqtt
+          id: cold_water
+          topic: zigbee2mqtt_1/cold_water_tap_bath/action
+          payload: off
+        - trigger: mqtt
+          id: hot_water
+          topic: zigbee2mqtt_1/hot_water_tap_bath/action
+          payload: off
+      actions: 
+        choose:
+          - conditions:
+            - condition: trigger
+              id: "cold_water"
+            sequence:
+              action: notify.mobile_app_iphone_aleksandr
+              data:
+                title: Внимание!!!
+                message: "Холодная вода в ванной перекрыта"
+          - conditions:
+            - condition: trigger
+              id: "hot_water"
+            sequence:
+              action: notify.mobile_app_iphone_aleksandr
+              data:
+                title: Внимание!!!
+                message: "Горячая вода в ванной перекрыта"
