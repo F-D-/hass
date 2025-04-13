@@ -31,6 +31,6 @@ hallway_automations:
       #     state: "off"
       actions:
         action: >
-          switch.turn_{{ trigger.to_state.state }}
+          light.turn_{{ trigger.to_state.state }}
         entity_id: light.switch_hallway_osveshchenie_1
     #=======================================================
