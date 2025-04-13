@@ -25,10 +25,10 @@ hallway_automations:
           to:
             - "on"
             - "off"
-      # conditions:
-      #   - condition: state
-      #     entity_id: light.switch_hallway_osveshchenie_1
-      #     state: "off"
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.is_night
+          state: "off"
       actions:
         action: >
           light.turn_{{ trigger.to_state.state }}
