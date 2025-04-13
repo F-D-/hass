@@ -24,8 +24,7 @@ bath_automations:
       - name: turn_on_toweldryer_in_bath
         state: >-
           {{
-            is_state("binary_sensor.door_bath_contact", "off")
-            and states("sensor.air_toweldryer_bath_humidity") | float >= 35
+            states("sensor.air_toweldryer_bath_humidity") | float >= 35
           }}
         unique_id: turn_on_toweldryer_in_bath
       - name: waterleak_in_bath
