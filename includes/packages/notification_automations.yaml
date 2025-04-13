@@ -1,4 +1,4 @@
-waterleak_automations:
+notification_automations:
 
   automation:
     - id: utechki_vody
@@ -36,4 +36,28 @@ waterleak_automations:
               {% elif trigger.idx == "4" %}
               кухне 
               {% endif %}
+#===================================================
+    - id: uvedomlenie_o_perecrytii_gorachey_vody_v_vanoy
+      alias: Уведомление о перекрытии горячей воды в ванной
+      triggers:
+        - trigger: mqtt
+          topic: zigbee2mqtt_1/hot_water_tap_bath/action
+          payload: "off"
+      actions: 
+        - action: notify.mobile_app_iphone_aleksandr
+          data:
+            title: Внимание!!!
+            message: "Горячая вода в ванной перекрыта"
+#===================================================
+    - id: uvedomlenie_o_perecrytii_holodnoy_vody_v_vanoy
+      alias: Уведомление о перекрытии холодной воды в ванной
+      triggers:
+        - trigger: mqtt
+          topic: zigbee2mqtt_1/cold_water_tap_bath/action
+          payload: "off"
+      actions: 
+        - action: notify.mobile_app_iphone_aleksandr
+          data:
+            title: Внимание!!!
+            message: "Холодная вода в ванной перекрыта"
 

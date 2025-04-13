@@ -21,12 +21,14 @@ bath_automations:
             and states("sensor.air_bath_humidity") | float > 60
           }}
         unique_id: turn_on_fan_in_bath
+#===================================================
       - name: turn_on_toweldryer_in_bath
         state: >-
           {{
             states("sensor.air_toweldryer_bath_humidity") | float >= 35
           }}
         unique_id: turn_on_toweldryer_in_bath
+#===================================================
       - name: waterleak_in_bath
         state: >-
           {{
@@ -57,7 +59,7 @@ bath_automations:
           #Запустить скрипт включающий свет разной интенсивности в зависимости от времени суток
         - action: script.turn_on
           entity_id: script.light_turn_on_depending_on_daytime
-  #===================================================
+#===================================================
     - id: svet_v_vannoy_vikluchit_po_datchiku_dvizhenia
       alias: Свет в ванной выключить по датчику движения
       triggers:
@@ -128,27 +130,3 @@ bath_automations:
           entity_id: 
             - switch.hot_water_tap_bath
             - switch.cold_water_tap_bath
-#===================================================
-    - id: uvedomlenie_o_perecrytii_gorachey_vody_v_vanoy
-      alias: Уведомление о перекрытии горячей воды в ванной
-      triggers:
-        - trigger: mqtt
-          topic: zigbee2mqtt_1/hot_water_tap_bath/action
-          payload: "off"
-      actions: 
-        - action: notify.mobile_app_iphone_aleksandr
-          data:
-            title: Внимание!!!
-            message: "Горячая вода в ванной перекрыта"
-#===================================================
-    - id: uvedomlenie_o_perecrytii_holodnoy_vody_v_vanoy
-      alias: Уведомление о перекрытии холодной воды в ванной
-      triggers:
-        - trigger: mqtt
-          topic: zigbee2mqtt_1/cold_water_tap_bath/action
-          payload: "off"
-      actions: 
-        - action: notify.mobile_app_iphone_aleksandr
-          data:
-            title: Внимание!!!
-            message: "Холодная вода в ванной перекрыта"
