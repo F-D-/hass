@@ -31,3 +31,14 @@ panel_custom:
     require_admin: true
     config:
       ingress: core_configurator
+
+smartir:
+
+climate:
+  - platform: smartir
+    name: Hall AC
+    unique_id: hall_ac
+    device_code: 2662
+    controller_data: zigbee2mqtt_1/ir_hall/set/ir_code_to_send
+    temperature_sensor: sensor.air_hall_temperature
+    humidity_sensor: sensor.air_hall_humidity
