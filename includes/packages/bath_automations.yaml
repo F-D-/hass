@@ -1,6 +1,6 @@
 bath_automations:
   script:
-    light_turn_on_depending_on_daytime:
+    light_turn_on_depending_on_daytime_bath:
       sequence:
           #Включить свет
         - action: switch.turn_on
@@ -58,7 +58,7 @@ bath_automations:
       actions:
           #Запустить скрипт включающий свет разной интенсивности в зависимости от времени суток
         - action: script.turn_on
-          entity_id: script.light_turn_on_depending_on_daytime
+          entity_id: script.light_turn_on_depending_on_daytime_bath
 #===================================================
     - id: svet_v_vannoy_vikluchit_po_datchiku_dvizhenia
       alias: Свет в ванной выключить по датчику движения

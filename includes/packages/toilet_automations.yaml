@@ -1,5 +1,18 @@
-toilet_light:
+toilet_automations:
  
+  script:
+    light_turn_on_depending_on_daytime_toulet:
+      sequence:
+          #Включить свет
+        - action: switch.turn_on
+          #Если ночь, включить подсветку, если день включить основной свет
+          data_template:
+            entity_id: >
+              {% if is_state("binary_sensor.is_night",  "on") %}
+              switch.backlight_toilet
+              {% else %}
+              switch.switch_toilet_up
+              {% endif %} 
   timer:
     toilet_light_off_timer:
       name: Таймер на выключение света в туалете
@@ -42,12 +55,19 @@ toilet_light:
           entity_id: binary_sensor.motion_toilet
           to: "on"
       conditions:
-        - condition: state
-          entity_id: switch.switch_toilet_up
-          state: "off"
+          #Если свет выключен
+        - condition: template
+          #Если ночь, то проверить подсветку, если день - основной свет
+          value_template: > 
+            {% if is_state("binary_sensor.is_night",  "on") %}
+            {{ is_state ("switch.backlight_toilet", "off") }}
+            {% else %}
+            {{ is_state ("switch.switch_toilet_up", "off") }}
+            {% endif %} 
       actions:
-        - action: switch.turn_on
-          entity_id: switch.switch_toilet_up
+          #Запустить скрипт включающий свет разной интенсивности в зависимости от времени суток
+        - action: script.turn_on
+          entity_id: script.light_turn_on_depending_on_daytime_toulet
 #===================================================
     - id: toilet_light_off_by_presence_sensor
       alias: Выключить свет по датчику присутствия
@@ -61,7 +81,9 @@ toilet_light:
           state: "on"
       actions:
         - action: switch.turn_off
-          entity_id: switch.switch_toilet_up
+          entity_id: 
+            - switch.backlight_toilet
+            - switch.switch_toilet_up
 #===================================================
     - id: toilet_light_on_by_open_door
       alias: По открытию двери запустить таймер или включить свет
