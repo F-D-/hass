@@ -17,20 +17,31 @@ hallway_automations:
     #     - action: switch.turn_on
     #       entity_id: switch.switch_wardrobe_up
     #=====================================================
-    - id: perekluchenie_dwoynyh_svetilnikov_v_prihozhey
-      alias: Переключение двойных светильников в прихожей
+    - id: Vkluchenie_dwoynyh_svetilnikov_v_prihozhey
+      alias: Включение двойных светильников в прихожей
       triggers:
         - trigger: state
           entity_id: binary_sensor.presence_sensor_presence_entrance
-          to:
-            - "on"
-            - "off"
+          to: "on"
       conditions:
         - condition: state
           entity_id: binary_sensor.is_night
           state: "off"
       actions:
-        action: >
-          light.turn_{{ trigger.to_state.state }}
+        action: light.turn_on
+        entity_id: light.switch_hallway_osveshchenie_1
+    #=======================================================
+    - id: Vykluchenie_dwoynyh_svetilnikov_v_prihozhey
+      alias: Выключение двойных светильников в прихожей
+      triggers:
+        - trigger: state
+          entity_id: binary_sensor.presence_hallway_presence_sensor
+          to: "off"
+      conditions:
+        - condition: state
+          entity_id: light.switch_hallway_osveshchenie_1
+          state: "on"
+      actions:
+        action: light.turn_off
         entity_id: light.switch_hallway_osveshchenie_1
     #=======================================================
