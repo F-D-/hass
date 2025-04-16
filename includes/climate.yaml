@@ -1,0 +1,7 @@
+- platform: smartir
+  name: Hall AC
+  unique_id: hall_ac
+  device_code: 2663
+  controller_data: zigbee2mqtt_1/ir_hall/set
+  temperature_sensor: sensor.air_hall_temperature
+  humidity_sensor: sensor.air_hall_humidity
