@@ -7,7 +7,6 @@ test_light_brightness:
 
 humidity_for_toweldryer_on: 
   name: Влажность для включения полотенцесушителя
-  initial: 30
   min: 30
   max: 50
   step: 1
