@@ -5,8 +5,14 @@ test_light_brightness:
   max: 254
   step: 1
 
-humidity_for_toweldryer_on: 
-  name: Влажность для включения полотенцесушителя
+max_humidity_for_toweldryer_on: 
+  name: Максимальная влажность для включения полотенцесушителя
+  min: 30
+  max: 50
+  step: 1
+
+min_humidity_for_toweldryer_on: 
+  name: Минимальная влажность для включения полотенцесушителя
   min: 30
   max: 50
   step: 1
