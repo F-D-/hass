@@ -18,6 +18,7 @@ bath_automations:
         state: >-
           {{
             is_state("binary_sensor.door_bath_contact", "off")
+            and is_state("binary_sensor.is_night", "off")
             and states("sensor.air_bath_humidity") | float > 60
           }}
         unique_id: turn_on_fan_in_bath
