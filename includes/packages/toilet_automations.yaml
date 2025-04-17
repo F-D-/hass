@@ -68,19 +68,6 @@ toilet_automations:
         - action: script.turn_on
           entity_id: script.light_turn_on_depending_on_daytime_toulet
 #===================================================
-    - id: toilet_light_on_by_open_door
-      alias: По открытию двери запустить таймер или включить свет
-      triggers:
-          #дверь открывается 
-        - trigger: state
-          entity_id: binary_sensor.door_toilet_contact
-          to: "on"
-      conditions:
-        - condition: state
-          entity_id: binary_sensor.motion_toilet
-          state: "on"
-          
-#===================================================
     - id: toilet_light_off_by_presence_sensor
       alias: Выключить свет по датчику присутствия
       triggers:
