@@ -28,14 +28,19 @@ toilet_automations:
         unique_id: presence_to_motion_toilet
         
   automation:
-    - id: toilet_light_on_by_presence_sensor
-      alias: Включить свет по датчику присутствия
+    - id: vkluchit_svet_po_datchiku_prisutctvia_ili_po_datchiku_otkrytia_dveri
+      alias: Включить свет по датчику присутствия или по датчику открытия двери
       triggers:
         - trigger: state
+          id: occupancy
           entity_id: binary_sensor.motion_toilet
           to: "on"
+        - trigger: state
+          id: door
+          entity_id: binary_sensor.door_toilet_contact
+          to: "on"
       conditions:
-          #Если свет выключен
+            #Если свет выключен
         - condition: template
           #Если ночь, то проверить подсветку, если день - основной свет
           value_template: > 
@@ -45,13 +50,36 @@ toilet_automations:
             {{ is_state ("switch.switch_toilet_up", "off") }}
             {% endif %} 
           # если дверь открыта
-        - condition: state
-          entity_id: binary_sensor.door_toilet_contact
-          state: "on"
+        - or:
+          - and:
+            - condition: trigger
+              id: occupancy
+            - condition: state
+              entity_id: binary_sensor.door_toilet_contact
+              state: "on"
+          - and:
+            - condition: trigger
+              id: door
+            - condition: state
+              entity_id: binary_sensor.toilet_motion
+              state: "on"
       actions:
           #Запустить скрипт включающий свет разной интенсивности в зависимости от времени суток
         - action: script.turn_on
           entity_id: script.light_turn_on_depending_on_daytime_toulet
+#===================================================
+    - id: toilet_light_on_by_open_door
+      alias: По открытию двери запустить таймер или включить свет
+      triggers:
+          #дверь открывается 
+        - trigger: state
+          entity_id: binary_sensor.door_toilet_contact
+          to: "on"
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.motion_toilet
+          state: "on"
+          
 #===================================================
     - id: toilet_light_off_by_presence_sensor
       alias: Выключить свет по датчику присутствия
