@@ -61,7 +61,7 @@ toilet_automations:
             - condition: trigger
               id: door
             - condition: state
-              entity_id: binary_sensor.toilet_motion
+              entity_id: binary_sensor.motion_toilet
               state: "on"
       actions:
           #Запустить скрипт включающий свет разной интенсивности в зависимости от времени суток
