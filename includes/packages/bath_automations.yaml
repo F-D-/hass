@@ -26,8 +26,12 @@ bath_automations:
       - name: turn_on_toweldryer_in_bath
         state: >-
           {{
-            states("sensor.air_toweldryer_bath_humidity") | float >= states("input_number.min_humidity_for_toweldryer_on") | float
+            states("sensor.air_toweldryer_bath_humidity") | float >= states("input_number.max_humidity_for_toweldryer_on") | float
+            or 
+            (states("sensor.air_toweldryer_bath_humidity") | float >= states("input_number.min_humidity_for_toweldryer_on") | float
             and states("sensor.air_toweldryer_bath_humidity") | float <= states("input_number.max_humidity_for_toweldryer_on") | float
+            and is_state("binary_sensor.turn_on_toweldryer_in_bath", "on"))
+
           }}
         unique_id: turn_on_toweldryer_in_bath
 #===================================================
