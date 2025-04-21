@@ -43,13 +43,19 @@ bath_automations:
           }}
         unique_id: waterleak_in_bath
 #===================================================
+      - name: motion_bath
+        state: >
+          {{not is_state("sensor.presence_bath_presence_event", "leave")}}
+        device_class: motion
+        unique_id: presence_to_motion_bath
+#===================================================
   automation:
-    - id: svet_v_vannoy_vkluchit_po_datchiku_dvizhenia
-      alias: Свет в ванной включить по датчику движения
+    - id: svet_v_vannoy_vkluchit_po_datchiku_prisutctvia
+      alias: Свет в ванной включить по датчику присутствия
       triggers:
           #Обнаруживается движение
         - trigger: state
-          entity_id: binary_sensor.motion_bath_occupancy
+          entity_id: binary_sensor.motion_bath
           to: "on"
       conditions:
           #Если свет выключен
@@ -66,18 +72,13 @@ bath_automations:
         - action: script.turn_on
           entity_id: script.light_turn_on_depending_on_daytime_bath
 #===================================================
-    - id: svet_v_vannoy_vikluchit_po_datchiku_dvizhenia
-      alias: Свет в ванной выключить по датчику движения
+    - id: svet_v_vannoy_vikluchit_po_datchiku_prisutctvia
+      alias: Свет в ванной выключить по датчику присутствия
       triggers:
           #Движение не обнаруживается
         - trigger: state
-          entity_id: binary_sensor.motion_bath_occupancy
+          entity_id: binary_sensor.motion_bath
           to: "off"
-      conditions:
-          #Если дверь открыта
-        - condition: state
-          entity_id: binary_sensor.door_bath_contact
-          state: "on"
       actions:
         #Выключить весь свет
         - action: switch.turn_off
