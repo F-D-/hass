@@ -20,7 +20,7 @@ toilet_automations:
       restore: true
     toilet_long_time_light_timer:
       name: Таймер на случай долгого включенного света в туалете
-      duration: "00:00:10"
+      duration: "00:35:00"
       restore: true
 
   template:
