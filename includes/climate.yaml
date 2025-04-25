@@ -1,7 +1,23 @@
 - platform: smartir
-  name: Hall AC
-  unique_id: hall_ac
+  name: AC Hall
+  unique_id: ac_hall
   device_code: 2663
   controller_data: zigbee2mqtt_1/ir_hall/set
   temperature_sensor: sensor.air_hall_temperature
   humidity_sensor: sensor.air_hall_humidity
+
+- platform: smartir
+  name: AC Andrey bedroom
+  unique_id: ac_andrey
+  device_code: 2663
+  controller_data: zigbee2mqtt_1/ir_andrey_bedroom/set
+  temperature_sensor: sensor.air_andrey_bedroom_temperature
+  humidity_sensor: sensor.air_andrey_bedroom_humidity
+
+- platform: smartir
+  name: AC Marina bedroom
+  unique_id: ac_marina
+  device_code: 2663
+  controller_data: zigbee2mqtt_1/ir_marina_bedroom/set
+  # temperature_sensor: sensor.air_andrey_bedroom_temperature
+  # humidity_sensor: sensor.air_andrey_bedroom_humidity
