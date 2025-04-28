@@ -1,11 +1,11 @@
-- name: alert_yandex_alice_hall  # любое название
-  unique_id: alert_yandex_alice_hall
+- name: alert_yandex_alice_hall
+  # unique_id: alert_yandex_alice_hall
   platform: yandex_station
   data:
     entity_id: media_player.yandex_station_hall
 # ===========================================================
-- name: alert_yandex_alice_marina_bedroom  # любое название
-  unique_id: alert_yandex_alice_marina_bedroom
+- name: alert_yandex_alice_marina_bedroom 
+  # unique_id: alert_yandex_alice_marina_bedroom
   platform: yandex_station
   data:
     entity_id: media_player.yandex_station_marina_bedroom

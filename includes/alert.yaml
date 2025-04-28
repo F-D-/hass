@@ -9,3 +9,4 @@ entrance_door:
     notifiers:
       - mobile_app_iphone_aleksandr
       - alice_hall_alert
+      - alert_yandex_alice_marina_bedroom 
