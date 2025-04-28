@@ -14,7 +14,7 @@ entrance_door:
   timer:
     lock_entrance_door_timer:
       name: Таймер входной двери
-      duration: "00:05:00"
+      duration: "00:00:07"
       restore: true
 
   automation:
@@ -49,8 +49,23 @@ entrance_door:
           event_data:
             entity_id: timer.lock_entrance_door_timer
       actions:
-        - action: input_boolean.turn_on
-          entity_id: input_boolean.lock_trigger_from_hass
+        - choose:
+          - conditions:
+            - condition: state
+              entity_id: binary_sensor.door_entrance_contact
+              state: "on"
+            sequence:
+              - action: notify.mobile_app_iphone_aleksandr
+                data:
+                  title: Внимание!!!
+                  message: "Входная дверь долго не закрыта!"
+          - conditions:
+            - condition: state
+              entity_id: binary_sensor.door_entrance_contact
+              state: "off"
+            sequence:
+              - action: input_boolean.turn_on
+                entity_id: input_boolean.lock_trigger_from_hass
 #==========================================================
     - id: reset_timer_if_door_already_closed
       alias: Сброс таймера если дверь уже закрыта

@@ -21,7 +21,7 @@ bedroom_marina:
           entity_id:  
               - light.lamp_big_bedroom_marina_white
               - light.lamp_small_bedroom_marina
-
+#===================================================
     - id: dimmer_v_spalne_mariny_vkluchenie_maksimalnoy_yarkosti
       alias: Диммер в спальне Марины включение максимальной яркости
       triggers:
@@ -36,7 +36,7 @@ bedroom_marina:
           data:
             brightness: 254
             color_temp_kelvin: 4300
-
+#===================================================
     - id: dimmer_v_spalne_mariny_perekluchenie_cvetovogo_kolca
       alias: Диммер в спальне Марины переключение цветового кольца
       triggers:
