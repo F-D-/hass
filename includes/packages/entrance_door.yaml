@@ -50,15 +50,15 @@ entrance_door:
             entity_id: timer.lock_entrance_door_timer
       actions:
         - choose:
-          - conditions:
-            - condition: state
-              entity_id: binary_sensor.door_entrance_contact
-              state: "on"
-            sequence:
-              - action: notify.mobile_app_iphone_aleksandr
-                data:
-                  title: Внимание!!!
-                  message: "Входная дверь долго не закрыта!"
+          # - conditions:
+          #   - condition: state
+          #     entity_id: binary_sensor.door_entrance_contact
+          #     state: "on"
+          #   sequence:
+          #     - action: notify.mobile_app_iphone_aleksandr
+          #       data:
+          #         title: Внимание!!!
+          #         message: "Входная дверь долго не закрыта!"
           - conditions:
             - condition: state
               entity_id: binary_sensor.door_entrance_contact

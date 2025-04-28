@@ -1,8 +1,8 @@
 entrance_door:
     name: Entrance door is open
     message: Входная дверь открыта дольше 5 минут
-    entity_id: input_boolean.test_light
-    # entity_id: binary_sensor.door_entrance_contact
+    # entity_id: input_boolean.test_light
+    entity_id: binary_sensor.door_entrance_contact
     state: "on"
     repeat: 1
     skip_first: true
