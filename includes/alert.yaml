@@ -8,5 +8,5 @@ entrance_door:
     skip_first: true
     notifiers:
       - mobile_app_iphone_aleksandr
-      - alice_hall_alert
+      - alert_yandex_alice_hall
       - alert_yandex_alice_marina_bedroom 
