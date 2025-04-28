@@ -1,5 +1,4 @@
-alice_hall_alert:
-  - name: alice_hall_alert  # любое название
-    platform: yandex_station
-    data:
-      entity_id: media_player.yandex_station_marina_bedroom
+- name: alice_hall_alert  # любое название
+  platform: yandex_station
+  data:
+    entity_id: media_player.yandex_station_marina_bedroom
