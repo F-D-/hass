@@ -4,7 +4,7 @@ entrance_door:
     # entity_id: input_boolean.test_light
     entity_id: binary_sensor.door_entrance_contact
     state: "on"
-    repeat: 1
+    repeat: 5
     skip_first: true
     notifiers:
       - mobile_app_iphone_aleksandr
