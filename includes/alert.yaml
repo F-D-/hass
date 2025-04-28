@@ -1,5 +1,4 @@
 entrance_door:
-    unique_id: alert_ent:erance_door_is_open
     name: Entrance door is open
     message: Входная дверь открыта дольше 5 минут
     entity_id: input_boolean.test_light
