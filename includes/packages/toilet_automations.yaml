@@ -16,7 +16,7 @@ toilet_automations:
   timer:
     toilet_light_off_timer:
       name: Таймер на выключение света в туалете
-      duration: "00:00:05"
+      duration: "00:00:10"
       restore: true
     toilet_long_time_light_timer:
       name: Таймер на случай долгого включенного света в туалете
@@ -73,6 +73,8 @@ toilet_automations:
           entity_id: script.light_turn_on_depending_on_daytime_toulet
         - action: timer.start
           entity_id: timer.toilet_long_time_light_timer
+        - action: timer.cancel
+          entity_id: timer.toilet_light_off_timer
 #===================================================
     - id: toilet_light_off_by_presence_sensor
       alias: Выключить свет по датчику присутствия
