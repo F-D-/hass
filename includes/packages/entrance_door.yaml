@@ -14,7 +14,7 @@ entrance_door:
   timer:
     lock_entrance_door_timer:
       name: Таймер входной двери
-      duration: "00:00:07"
+      duration: "00:05:00"
       restore: true
 
   automation:

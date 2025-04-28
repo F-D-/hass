@@ -24,6 +24,7 @@ input_number: !include includes/input_number.yaml
 binary_sensor: !include includes/binary_sensor.yaml
 climate: !include includes/climate.yaml
 alert: !include includes/alert.yaml
+notify: !include includes/notify.yaml
 
 panel_custom:
   - name: server_state
