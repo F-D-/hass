@@ -25,7 +25,6 @@ entrance_door:
           entity_id: binary_sensor.door_entrance_contact
           to: "off"
       action:
-        # - delay: 1
         - action: input_boolean.turn_on
           entity_id: input_boolean.lock_trigger_from_hass
 #==========================================================
@@ -67,11 +66,14 @@ entrance_door:
               - action: input_boolean.turn_on
                 entity_id: input_boolean.lock_trigger_from_hass
 #==========================================================
-    - id: reset_timer_if_door_already_closed
-      alias: Сброс таймера если дверь уже закрыта
+    - id: reset_timer_if_door_lock_closed_or_door_opening
+      alias: Сброс таймера если замок закрыт или дверь открывается
       triggers:
         - trigger: state
           entity_id: input_boolean.lock_trigger_in_hass
+          to: "on"
+        - trigger: state
+          entity_id: binary_sensor.door_entrance_contact
           to: "on"
       actions:
         - action: timer.cancel
