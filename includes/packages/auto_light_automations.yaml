@@ -22,31 +22,31 @@ auto_light_automations:
         - parallel:
             - sequence:
               - delay: 
-                minutes: >-
-                  {{ 
-                    range(states('input_number. min_minutes_presence_simulation_light_switch'), 
-                    'input_number. max_minutes_presence_simulation_light_switch') | random 
-                  }}
+                  minutes: >-
+                    {{ 
+                      range(states('input_number. min_minutes_presence_simulation_light_switch'), 
+                      'input_number. max_minutes_presence_simulation_light_switch') | random 
+                    }}
               - action: switch.turn_on
                 entity_id: switch.switch_kitchen_hall_left
 
             - sequence:
               - delay: 
-                minutes: >-
-                  {{ 
-                    range(states('input_number. min_minutes_presence_simulation_light_switch'), 
-                    'input_number. max_minutes_presence_simulation_light_switch') | random 
-                  }}
+                  minutes: >-
+                    {{ 
+                      range(states('input_number. min_minutes_presence_simulation_light_switch'), 
+                      'input_number. max_minutes_presence_simulation_light_switch') | random 
+                    }}
               - action: light.turn_on
                 entity_id: light.lamp_kitchen
 
             - sequence:
               - delay: 
-                minutes: >-
-                  {{ 
-                    range(states('input_number. min_minutes_presence_simulation_light_switch'), 
-                    'input_number. max_minutes_presence_simulation_light_switch') | random 
-                  }}
+                  minutes: >-
+                    {{ 
+                      range(states('input_number. min_minutes_presence_simulation_light_switch'), 
+                      'input_number. max_minutes_presence_simulation_light_switch') | random 
+                    }}
               - action: light.turn_on
                 entity_id: light.lamp_big_bedroom_marina_white
                 data:
@@ -55,11 +55,11 @@ auto_light_automations:
 
             - sequence:
               - delay: 
-                minutes: >-
-                  {{ 
-                    range(states('input_number. min_minutes_presence_simulation_light_switch'), 
-                    'input_number. max_minutes_presence_simulation_light_switch') | random 
-                  }}
+                  minutes: >-
+                    {{ 
+                      range(states('input_number. min_minutes_presence_simulation_light_switch'), 
+                      'input_number. max_minutes_presence_simulation_light_switch') | random 
+                    }}
               - action: light.turn_on
                 entity_id: light.lamp_bedroom_andrey_white
                 data:
@@ -79,40 +79,40 @@ auto_light_automations:
         - parallel:
             - sequence:
               - delay: 
-                minutes: >-
-                  {{ 
-                    range(states('input_number. min_minutes_presence_simulation_light_switch'), 
-                    'input_number. max_minutes_presence_simulation_light_switch') | random 
-                  }}
+                  minutes: >-
+                    {{ 
+                      range(states('input_number. min_minutes_presence_simulation_light_switch'), 
+                      'input_number. max_minutes_presence_simulation_light_switch') | random 
+                    }}
               - action: switch.turn_off
                 entity_id: switch.switch_kitchen_hall_left
 
             - sequence:
               - delay: 
-                minutes: >-
-                  {{ 
-                    range(states('input_number. min_minutes_presence_simulation_light_switch'), 
-                    'input_number. max_minutes_presence_simulation_light_switch') | random 
-                  }}
+                  minutes: >-
+                    {{ 
+                      range(states('input_number. min_minutes_presence_simulation_light_switch'), 
+                      'input_number. max_minutes_presence_simulation_light_switch') | random 
+                    }}
               - action: light.turn_off
                 entity_id: light.lamp_kitchen
 
             - sequence:
               - delay: 
-                minutes: >-
-                  {{ 
-                    range(states('input_number. min_minutes_presence_simulation_light_switch'), 
-                    'input_number. max_minutes_presence_simulation_light_switch') | random 
-                  }}
+                  minutes: >-
+                    {{ 
+                      range(states('input_number. min_minutes_presence_simulation_light_switch'), 
+                      'input_number. max_minutes_presence_simulation_light_switch') | random 
+                    }}
               - action: light.turn_off
                 entity_id: light.lamp_big_bedroom_marina_white
 
             - sequence:
               - delay: 
-                minutes: >-
-                  {{ 
-                    range(states('input_number. min_minutes_presence_simulation_light_switch'), 
-                    'input_number. max_minutes_presence_simulation_light_switch') | random 
-                  }}
+                  minutes: >-
+                    {{ 
+                      range(states('input_number. min_minutes_presence_simulation_light_switch'), 
+                      'input_number. max_minutes_presence_simulation_light_switch') | random 
+                    }}
               - action: light.turn_off
                 entity_id: light.lamp_bedroom_andrey_white
