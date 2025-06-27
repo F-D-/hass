@@ -16,3 +16,15 @@ min_humidity_for_toweldryer_on:
   min: 30
   max: 60
   step: 1
+
+min_minutes_presence_simulation_light_switch: 
+  name: Минимальное время для рамдомного вкючения света
+  min: 1
+  max: 50
+  step: 1
+
+max_minutes_presence_simulation_light_switch: 
+  name: Максимальное время для рамдомного вкючения света
+  min: 1
+  max: 50
+  step: 1
